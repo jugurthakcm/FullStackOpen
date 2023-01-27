@@ -28,7 +28,7 @@ const Statistics = (props) => {
   let average = Math.round(((good + neutral * 0 + bad * -1) / total) * 10) / 10;
   let positive = Math.round((good / total) * 100 * 10) / 10 + " %";
 
-  if (good == 0 && neutral == 0 && bad == 0) {
+  if (good === 0 && neutral === 0 && bad === 0) {
     return <p>No feedback was given</p>;
   }
   return (
