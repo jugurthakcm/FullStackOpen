@@ -6,6 +6,12 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const personExists = persons.filter((person) => person.name === newName);
+
+    if (personExists.length) {
+      alert(`${newName} already exists in the phonebook`);
+      return setNewName("");
+    }
     setPersons([...persons, {name: newName}]);
     setNewName("");
   };
@@ -15,7 +21,8 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          name: <input onChange={(e) => setNewName(e.target.value)} />
+          name:{" "}
+          <input onChange={(e) => setNewName(e.target.value)} value={newName} />
         </div>
         <div>
           <button type="submit">add</button>
