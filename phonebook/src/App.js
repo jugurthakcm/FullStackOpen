@@ -6,6 +6,7 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [searchName, setSearchName] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,12 +20,21 @@ const App = () => {
     }
     setPersons([...persons, {name: newName, number: newNumber}]);
     setNewName("");
-    setNewNumber("")
+    setNewNumber("");
+  };
+
+  const handleSearch = (e) => {
+    setSearchName(e.target.value);
   };
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <div>
+        Search name
+        <input value={searchName} onChange={handleSearch} />
+      </div>
+      <h2>Add new</h2>
       <form onSubmit={handleSubmit}>
         <div>
           Name:{" "}
