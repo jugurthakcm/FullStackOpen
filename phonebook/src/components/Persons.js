@@ -5,15 +5,15 @@ const Persons = ({searchName, persons}) => {
     <div>
       {searchName
         ? persons
-            .filter((person) =>
+            ?.filter((person) =>
               person.name.toLowerCase().includes(searchName.toLowerCase())
             )
-            .map((person) => (
+            ?.map((person) => (
               <p key={person.name}>
                 {person.name} {person.number}
               </p>
             ))
-        : persons.map((person) => (
+        : persons?.map((person) => (
             <p key={person.name}>
               {person.name} {person.number}
             </p>
