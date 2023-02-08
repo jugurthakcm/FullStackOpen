@@ -12,7 +12,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.jsonbin.io/v3/qs/63e3d685c0e7653a05728226")
+      .get("https://api.jsonbin.io/v3/qs/63e41594c0e7653a0572b4c1")
       .then((res) => setPersons(res.data.record.persons));
   }, []);
 
@@ -26,6 +26,14 @@ const App = () => {
       setNewName("");
       return;
     }
+
+    axios
+      .post("https://api.jsonbin.io/v3/qs/63e41594c0e7653a0572b4c1", {
+        name: newName,
+        number: newNumber,
+      })
+      .then((res) => console.log(res));
+
     setPersons([...persons, {name: newName, number: newNumber}]);
     setNewName("");
     setNewNumber("");
