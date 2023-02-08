@@ -27,13 +27,6 @@ const App = () => {
       return;
     }
 
-    axios
-      .post("https://api.jsonbin.io/v3/qs/63e41594c0e7653a0572b4c1", {
-        name: newName,
-        number: newNumber,
-      })
-      .then((res) => console.log(res));
-
     setPersons([...persons, {name: newName, number: newNumber}]);
     setNewName("");
     setNewNumber("");
