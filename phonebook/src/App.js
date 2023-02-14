@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import AddPerson from "./components/AddPerson";
 import Filter from "./components/Filter";
 import Persons from "./components/Persons";
-import {getAll, addPerson} from "./services/persons";
+import {getAll, addPerson, deletePerson} from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -34,6 +34,11 @@ const App = () => {
     setNewNumber("");
   };
 
+  const handleDelete = (id) => {
+    const updatedPersons = persons.filter((person) => person._id !== id);
+    deletePerson(id).then((res) => setPersons([...updatedPersons]));
+  };
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -48,7 +53,11 @@ const App = () => {
         handleSubmit={handleSubmit}
       />
       <h2>Numbers</h2>
-      <Persons searchName={searchName} persons={persons} />
+      <Persons
+        searchName={searchName}
+        persons={persons}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
