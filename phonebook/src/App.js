@@ -2,7 +2,12 @@ import {useState, useEffect} from "react";
 import AddPerson from "./components/AddPerson";
 import Filter from "./components/Filter";
 import Persons from "./components/Persons";
-import {getAll, addPerson, deletePerson} from "./services/persons";
+import {
+  getAll,
+  addPerson,
+  deletePerson,
+  updatePerson,
+} from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -16,13 +21,19 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const personExists =
-      persons.length && persons.filter((person) => person.name === newName);
+    const personExists = persons.find((person) => person.name === newName);
 
-    if (personExists.length) {
-      alert(`${newName} already exists in the phonebook`);
-      setNewNumber("");
-      setNewName("");
+    if (personExists) {
+      const confirm = window.confirm(
+        `${newName} already exists in the phonebook, repalce old number with new one?`
+      );
+      if (confirm) {
+      
+        updatePerson(personExists._id, {
+          ...personExists,
+          number: newNumber,
+        }).then((res) => console.log(res));
+      }
       return;
     }
 
