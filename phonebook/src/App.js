@@ -5,20 +5,21 @@ import Persons from "./components/Persons";
 import axios from "axios";
 
 const App = () => {
-  const [persons, setPersons] = useState();
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchName, setSearchName] = useState("");
 
   useEffect(() => {
     axios
-      .get("https://api.jsonbin.io/v3/qs/63e41594c0e7653a0572b4c1")
-      .then((res) => setPersons(res.data.record.persons));
+      .get("https://crudcrud.com/api/5b003126882b40a8abdb4649c3ea0e8b/persons")
+      .then((res) => setPersons(res.data));
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const personExists = persons.filter((person) => person.name === newName);
+    const personExists =
+      persons.length && persons.filter((person) => person.name === newName);
 
     if (personExists.length) {
       alert(`${newName} already exists in the phonebook`);
@@ -27,7 +28,13 @@ const App = () => {
       return;
     }
 
-    setPersons([...persons, {name: newName, number: newNumber}]);
+    axios
+      .post(
+        "https://crudcrud.com/api/5b003126882b40a8abdb4649c3ea0e8b/persons",
+        {name: newName, number: newNumber}
+      )
+      .then((res) => setPersons([...persons, res.data]));
+
     setNewName("");
     setNewNumber("");
   };

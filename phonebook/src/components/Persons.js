@@ -9,7 +9,7 @@ const Persons = ({searchName, persons}) => {
               person.name.toLowerCase().includes(searchName.toLowerCase())
             )
             ?.map((person) => (
-              <p key={person.name}>
+              <p key={person._id}>
                 {person.name} {person.number}
               </p>
             ))
