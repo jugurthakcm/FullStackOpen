@@ -35,8 +35,13 @@ const App = () => {
   };
 
   const handleDelete = (id) => {
-    const updatedPersons = persons.filter((person) => person._id !== id);
-    deletePerson(id).then((res) => setPersons([...updatedPersons]));
+    const deletedPerson = persons.find((e) => e._id === id);
+    const confirm = window.confirm(`Delete ${deletedPerson.name} ?`);
+    if (confirm) {
+      const updatedPersons = persons.filter((person) => person._id !== id);
+      return deletePerson(id).then(() => setPersons([...updatedPersons]));
+    }
+    return;
   };
 
   return (
