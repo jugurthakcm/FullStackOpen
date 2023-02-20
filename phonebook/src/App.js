@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import AddPerson from "./components/AddPerson";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 import Persons from "./components/Persons";
 import {
   getAll,
@@ -14,6 +15,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchName, setSearchName] = useState("");
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     getAll().then((res) => setPersons(res.data));
@@ -28,18 +30,23 @@ const App = () => {
         `${newName} already exists in the phonebook, repalce old number with new one?`
       );
       if (confirm) {
-      
         updatePerson(personExists._id, {
           ...personExists,
           number: newNumber,
-        }).then((res) => console.log(res));
+        }).then((res) =>
+          setNotification(`${personExists.name} has been updated`)
+        );
       }
       return;
     }
 
-    addPerson({name: newName, number: newNumber}).then((res) =>
-      setPersons([...persons, res.data])
-    );
+    addPerson({name: newName, number: newNumber}).then((res) => {
+      setPersons([...persons, res.data]);
+      setNotification(`${res.data.name} has been added`);
+      setTimeout(() => {
+        setNotification();
+      }, 3000);
+    });
 
     setNewName("");
     setNewNumber("");
@@ -58,6 +65,9 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+
+      <Notification notification={notification} />
+
       <Filter searchName={searchName} setSearchName={setSearchName} />
 
       <h2>Add new</h2>

@@ -1,6 +1,6 @@
 import axios from "axios";
 const baseUrl =
-  "https://crudcrud.com/api/5b003126882b40a8abdb4649c3ea0e8b/persons";
+  "https://crudcrud.com/api/510c105e164e4f20a1e57b27c9806d4b/persons";
 
 export const getAll = () => {
   return axios.get(`${baseUrl}`);
