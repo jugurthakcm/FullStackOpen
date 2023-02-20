@@ -6,12 +6,9 @@ function App() {
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
-    return () => {
-      name &&
-        axios
-          .get(`https://restcountries.com/v3.1/name/${name}`)
-          .then((res) => setCountries(res.data));
-    };
+    axios
+      .get(`https://restcountries.com/v3.1/name/${name}`)
+      .then((res) => setCountries(res.data)).catch(()=>setCountries([]));
   }, [name]);
 
   return (
@@ -45,7 +42,14 @@ function App() {
         <p>Too many countries to display</p>
       ) : (
         countries.length > 1 &&
-        countries.map((c) => <p key={c.area}>{c.name.common}</p>)
+        countries.map((c) => {
+          return (
+            <p>
+              <span key={c.area}>{c.name.common}</span>
+              <button onClick={() => setName(c.name.common)}>show</button>
+            </p>
+          );
+        })
       )}
     </div>
   );
