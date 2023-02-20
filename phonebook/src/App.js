@@ -1,7 +1,8 @@
 import {useState, useEffect} from "react";
 import AddPerson from "./components/AddPerson";
 import Filter from "./components/Filter";
-import Notification from "./components/Notification";
+import Success from "./components/Success";
+import Error from "./components/Error";
 import Persons from "./components/Persons";
 import {
   getAll,
@@ -15,7 +16,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchName, setSearchName] = useState("");
-  const [notification, setNotification] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     getAll().then((res) => setPersons(res.data));
@@ -34,7 +36,7 @@ const App = () => {
           ...personExists,
           number: newNumber,
         }).then((res) =>
-          setNotification(`${personExists.name} has been updated`)
+          setSuccessMessage(`${personExists.name} has been updated`)
         );
       }
       return;
@@ -42,9 +44,9 @@ const App = () => {
 
     addPerson({name: newName, number: newNumber}).then((res) => {
       setPersons([...persons, res.data]);
-      setNotification(`${res.data.name} has been added`);
+      setSuccessMessage(`${res.data.name} has been added`);
       setTimeout(() => {
-        setNotification();
+        setSuccessMessage();
       }, 3000);
     });
 
@@ -57,7 +59,13 @@ const App = () => {
     const confirm = window.confirm(`Delete ${deletedPerson.name} ?`);
     if (confirm) {
       const updatedPersons = persons.filter((person) => person._id !== id);
-      return deletePerson(id).then(() => setPersons([...updatedPersons]));
+      return deletePerson(id)
+        .then(() => setPersons([...updatedPersons]))
+        .catch(() =>
+          setErrorMessage(
+            `${deletedPerson.name} has already been deleted from the server`
+          )
+        );
     }
     return;
   };
@@ -66,7 +74,8 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
 
-      <Notification notification={notification} />
+      <Success successMessage={successMessage} />
+      <Error errorMessage={errorMessage} />
 
       <Filter searchName={searchName} setSearchName={setSearchName} />
 
