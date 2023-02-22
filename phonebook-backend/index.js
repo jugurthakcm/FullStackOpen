@@ -52,11 +52,11 @@ app.delete("/api/persons/:id", (req, res) => {
 app.post("/api/persons", (req, res) => {
   const person = req.body;
   if (!person.number || !person.name)
-    res.status(400).send("Name or Number is missing");
+    return res.status(400).send("Name or Number is missing");
 
   const personExist = persons.filter((p) => p.name === person.name);
 
-  if (personExist.length) res.status(400).send("The name needs to be unique");
+  if (personExist.length) return res.status(400).send("The name needs to be unique");
 
   const id = Math.floor(Math.random() * 1000000000000000);
   persons = [...persons, {id, ...person}];
