@@ -34,6 +34,13 @@ app.get("/info", (req, res) => {
   <p>${date}</p>`);
 });
 
+app.get("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const person = persons.filter((p) => p.id === id);
+  if (!person.length) res.status(404).send("Not Found");
+  res.json(person);
+});
+
 const PORT = 3001;
 
 app.listen(PORT, () => {
