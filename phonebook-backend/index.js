@@ -1,7 +1,10 @@
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
 
 app.use(express.json());
+app.use(morgan("tiny"));
 
 let persons = [
   {
@@ -56,10 +59,11 @@ app.post("/api/persons", (req, res) => {
 
   const personExist = persons.filter((p) => p.name === person.name);
 
-  if (personExist.length) return res.status(400).send("The name needs to be unique");
+  if (personExist.length)
+    return res.status(400).send("The name needs to be unique");
 
   const id = Math.floor(Math.random() * 1000000000000000);
-  persons = [...persons, {id, ...person}];
+  persons = [...persons, { id, ...person }];
   res.status(200).json(persons);
 });
 
