@@ -1,6 +1,6 @@
 import axios from "axios";
 const baseUrl =
-  "https://crudcrud.com/api/510c105e164e4f20a1e57b27c9806d4b/persons";
+  "https://jugurthakcm-sturdy-halibut-xvg954999wp3vjj6-3001.preview.app.github.dev/api/persons";
 
 export const getAll = () => {
   return axios.get(`${baseUrl}`);

@@ -32,7 +32,7 @@ const App = () => {
         `${newName} already exists in the phonebook, repalce old number with new one?`
       );
       if (confirm) {
-        updatePerson(personExists._id, {
+        updatePerson(personExists.id, {
           ...personExists,
           number: newNumber,
         }).then((res) =>
@@ -55,10 +55,10 @@ const App = () => {
   };
 
   const handleDelete = (id) => {
-    const deletedPerson = persons.find((e) => e._id === id);
+    const deletedPerson = persons.find((e) => e.id === id);
     const confirm = window.confirm(`Delete ${deletedPerson.name} ?`);
     if (confirm) {
-      const updatedPersons = persons.filter((person) => person._id !== id);
+      const updatedPersons = persons.filter((person) => person.id !== id);
       return deletePerson(id)
         .then(() => setPersons([...updatedPersons]))
         .catch(() =>

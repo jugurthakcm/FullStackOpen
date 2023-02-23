@@ -1,8 +1,10 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 morgan.token("body", function (req, res) {
@@ -70,8 +72,8 @@ app.post("/api/persons", (req, res) => {
     return res.status(400).send("The name needs to be unique");
 
   const id = Math.floor(Math.random() * 1000000000000000);
-  persons = [...persons, { id, ...person }];
-  res.status(200).json(persons);
+
+  res.status(200).json({id, ...person});
 });
 
 const PORT = 3001;
