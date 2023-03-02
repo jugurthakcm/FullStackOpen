@@ -40,12 +40,14 @@ let persons = [
   },
 ];
 
+// Fetch Persons
 app.get("/api/persons", (req, res, next) => {
   Person.find({})
     .then((data) => res.json(data))
     .catch((err) => next(err));
 });
 
+// Get Info
 app.get("/info", (req, res) => {
   const date = new Date();
 
@@ -62,12 +64,14 @@ app.get("/api/persons/:id", (req, res) => {
   res.json(person);
 });
 
+// Delete a person
 app.delete("/api/persons/:id", (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
     .then(() => res.status(204).end())
     .catch((err) => next(err));
 });
 
+// Add a person
 app.post("/api/persons", (req, res) => {
   const { name, number } = req.body;
 
@@ -82,6 +86,17 @@ const errorHandler = (err, req, res, next) => {
   console.error(err.message);
   next(err);
 };
+
+// Update a person
+app.put("/api/persons/:id", (req, res, next) => {
+  Person.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then(() =>
+      Person.find({})
+        .then((persons) => res.json(persons))
+        .catch((err) => next(err))
+    )
+    .catch((err) => next(err));
+});
 
 app.use(errorHandler);
 

@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import AddPerson from "./components/AddPerson";
 import Filter from "./components/Filter";
 import Success from "./components/Success";
@@ -35,14 +35,15 @@ const App = () => {
         updatePerson(personExists.id, {
           ...personExists,
           number: newNumber,
-        }).then((res) =>
-          setSuccessMessage(`${personExists.name} has been updated`)
-        );
+        }).then((res) => {
+          setPersons(res.data);
+          setSuccessMessage(`${personExists.name} has been updated`);
+        });
       }
       return;
     }
 
-    addPerson({name: newName, number: newNumber}).then((res) => {
+    addPerson({ name: newName, number: newNumber }).then((res) => {
       setPersons([...persons, res.data]);
       setSuccessMessage(`${res.data.name} has been added`);
       setTimeout(() => {
