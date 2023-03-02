@@ -40,8 +40,10 @@ let persons = [
   },
 ];
 
-app.get("/api/persons", (req, res) => {
-  Person.find({}).then((data) => res.json(data));
+app.get("/api/persons", (req, res, next) => {
+  Person.find({})
+    .then((data) => res.json(data))
+    .catch((err) => next(err));
 });
 
 app.get("/info", (req, res) => {
@@ -60,10 +62,10 @@ app.get("/api/persons/:id", (req, res) => {
   res.json(person);
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  persons = persons.filter((p) => p.id !== id);
-  res.status(204).end();
+app.delete("/api/persons/:id", (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+    .then(() => res.status(204).end())
+    .catch((err) => next(err));
 });
 
 app.post("/api/persons", (req, res) => {
@@ -75,6 +77,13 @@ app.post("/api/persons", (req, res) => {
   const person = new Person({ name, number });
   person.save().then((savedPerson) => res.status(200).json(savedPerson));
 });
+
+const errorHandler = (err, req, res, next) => {
+  console.error(err.message);
+  next(err);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
 
