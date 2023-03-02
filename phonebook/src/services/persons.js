@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "https://wandering-frog-1503.fly.dev/api/persons";
+const baseUrl = "/api/persons";
 
 export const getAll = () => {
   return axios.get(`${baseUrl}`);

@@ -1,20 +1,21 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const Person = require("./models/Person");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("build"));
+// app.use(express.static("build"));
 
-morgan.token("body", function (req, res) {
-  return JSON.stringify(req.body);
-});
+// morgan.token("body", function (req, res) {
+//   return JSON.stringify(req.body);
+// });
 
-app.use(
-  morgan(":method :url :status :res[content-length] - :response-time ms :body")
-);
+// app.use(
+//   morgan(":method :url :status :res[content-length] - :response-time ms :body")
+// );
 
 let persons = [
   {
@@ -40,13 +41,16 @@ let persons = [
 ];
 
 app.get("/api/persons", (req, res) => {
-  return res.json(persons);
+  Person.find({}).then((data) => res.json(data));
 });
 
 app.get("/info", (req, res) => {
   const date = new Date();
-  res.send(`<p>Phonebook has info for ${persons.length} people</p>
-  <p>${date}</p>`);
+
+  Person.find({}).then((data) => {
+    res.send(`<p>Phonebook has info for ${data.length} people</p>
+    <p>${date}</p>`);
+  });
 });
 
 app.get("/api/persons/:id", (req, res) => {
