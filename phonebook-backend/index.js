@@ -67,20 +67,13 @@ app.delete("/api/persons/:id", (req, res) => {
 });
 
 app.post("/api/persons", (req, res) => {
-  const person = req.body;
-  if (!person.number || !person.name)
+  const { name, number } = req.body;
+
+  if (!number || !name)
     return res.status(400).send("Name or Number is missing");
 
-  const personExist = persons.filter((p) => p.name === person.name);
-
-  if (personExist.length)
-    return res.status(400).send("The name needs to be unique");
-
-  const id = Math.floor(Math.random() * 1000000000000000);
-
-  persons = [...persons, { id, ...person }];
-
-  res.status(200).json({ id, ...person });
+  const person = new Person({ name, number });
+  person.save().then((savedPerson) => res.status(200).json(savedPerson));
 });
 
 const PORT = process.env.PORT || 8080;
