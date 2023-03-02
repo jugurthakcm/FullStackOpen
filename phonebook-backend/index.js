@@ -57,11 +57,11 @@ app.get("/info", (req, res) => {
   });
 });
 
+// Fetch One Single Person
 app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.filter((p) => p.id === id);
-  if (!person.length) res.status(404).send("Not Found");
-  res.json(person);
+  Person.findById(req.params.id)
+    .then((data) => res.json(data))
+    .catch((err) => next(err));
 });
 
 // Delete a person
