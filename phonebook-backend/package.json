@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build:ui": "cd ../phonebook && npm run build && cp -r build ../phonebook-backend",
+    "deploy" : "fly deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
