@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import AddPerson from "./components/AddPerson";
 import Filter from "./components/Filter";
 import Success from "./components/Success";
@@ -43,13 +43,20 @@ const App = () => {
       return;
     }
 
-    addPerson({ name: newName, number: newNumber }).then((res) => {
-      setPersons([...persons, res.data]);
-      setSuccessMessage(`${res.data.name} has been added`);
-      setTimeout(() => {
-        setSuccessMessage();
-      }, 3000);
-    });
+    addPerson({name: newName, number: newNumber})
+      .then((res) => {
+        setPersons([...persons, res.data]);
+        setSuccessMessage(`${res.data.name} has been added`);
+        setTimeout(() => {
+          setSuccessMessage();
+        }, 3000);
+      })
+      .catch((err) => {
+        setErrorMessage(err.response.data.message);
+        setTimeout(() => {
+          setErrorMessage();
+        }, 3000);
+      });
 
     setNewName("");
     setNewNumber("");

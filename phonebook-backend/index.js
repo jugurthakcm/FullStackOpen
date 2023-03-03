@@ -50,13 +50,16 @@ app.delete("/api/persons/:id", (req, res, next) => {
 
 // Add a person
 app.post("/api/persons", (req, res) => {
-  const { name, number } = req.body;
+  const {name, number} = req.body;
 
   if (!number || !name)
     return res.status(400).send("Name or Number is missing");
 
-  const person = new Person({ name, number });
-  person.save().then((savedPerson) => res.status(200).json(savedPerson));
+  const person = new Person({name, number});
+  person
+    .save()
+    .then((savedPerson) => res.status(200).json(savedPerson))
+    .catch((err) => res.status(400).json(err));
 });
 
 const errorHandler = (err, req, res, next) => {
@@ -66,7 +69,7 @@ const errorHandler = (err, req, res, next) => {
 
 // Update a person
 app.put("/api/persons/:id", (req, res, next) => {
-  Person.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  Person.findByIdAndUpdate(req.params.id, req.body, {new: true})
     .then(() =>
       Person.find({})
         .then((persons) => res.json(persons))
