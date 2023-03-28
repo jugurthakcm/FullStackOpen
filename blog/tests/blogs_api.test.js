@@ -20,6 +20,7 @@ const initialBlogs = [
   },
 ];
 
+// Initialize the database
 beforeEach(async () => {
   await Blog.deleteMany({});
 
@@ -28,14 +29,20 @@ beforeEach(async () => {
   const promiseArray = blogObjects.map((blog) => blog.save());
 
   await Promise.all(promiseArray);
-
 });
 
-test("test if /api/blogs return coorect amount of blogs", async () => {
-
+// test if /api/blogs return correct amount of blogs
+test("test if /api/blogs return correct amount of blogs", async () => {
   const response = await api.get("/api/blogs");
 
   expect(response._body).toHaveLength(initialBlogs.length);
+});
+
+//Test if the response data are returned with an "id"
+test("test if response are returned with id", async () => {
+  const response = await api.get("/api/blogs");
+
+  response._body.forEach((e) => expect(e.id).toBeDefined());
 });
 
 // Close connection to the DB
