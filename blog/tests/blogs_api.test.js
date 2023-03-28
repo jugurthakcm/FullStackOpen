@@ -31,27 +31,27 @@ beforeEach(async () => {
   await Promise.all(promiseArray);
 });
 
-// test if /api/blogs return correct amount of blogs
+// Test if /api/blogs return correct amount of blogs
 test("test if /api/blogs return correct amount of blogs", async () => {
   const response = await api.get("/api/blogs");
 
   expect(response._body).toHaveLength(initialBlogs.length);
 });
 
-//Test if the response data are returned with an "id"
+// Test if the response data are returned with an "id"
 test("test if response are returned with id", async () => {
   const response = await api.get("/api/blogs");
 
   response._body.forEach((e) => expect(e.id).toBeDefined());
 });
 
-//Test if new blogs are added properly
+// Test if new blogs are added properly
 test("test if new blogs are added properly", async () => {
   const newBlogObject = {
     title: "New Blog",
     author: "New Author",
     url: "New Url",
-    likes: 0,
+    likes: 7,
   };
 
   await api.post("/api/blogs").send(newBlogObject);
@@ -59,10 +59,24 @@ test("test if new blogs are added properly", async () => {
 
   expect(response._body).toHaveLength(initialBlogs.length + 1);
 
-  const blogsTitle = response._body.map(blog => blog.title)
+  const blogsTitle = response._body.map((blog) => blog.title);
 
-  expect(blogsTitle).toContain("New Blog")
+  expect(blogsTitle).toContain("New Blog");
 });
+
+// Test if likes property is defaulted to 0
+test("Test if likes property is defaulted to 0", async () => {
+  const newBlogObject = {
+    title: "New Blog",
+    author: "New Author",
+    url: "New Url",
+  };
+
+  const response = await api.post("/api/blogs").send(newBlogObject);
+
+  expect(response._body.likes).toBe(0);
+});
+
 // Close connection to the DB
 afterAll(async () => {
   await mongoose.connection.close();
