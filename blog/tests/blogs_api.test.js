@@ -77,6 +77,18 @@ test("Test if likes property is defaulted to 0", async () => {
   expect(response._body.likes).toBe(0);
 });
 
+// Test if title or url is missing 400 Bad Request is sent
+test("Test if title or url is missing 400 Bad Request is sent", async () => {
+  const newBlogObject = {
+    author: "New Author",
+    title: "nwddsd",
+    likes: 12,
+  };
+  const response = await api.post("/api/blogs").send(newBlogObject);
+
+  expect(response.status).toBe(400);
+});
+
 // Close connection to the DB
 afterAll(async () => {
   await mongoose.connection.close();
