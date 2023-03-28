@@ -57,7 +57,7 @@ describe("Adding New Blogs", () => {
       likes: 7,
     };
 
-    await api.post("/api/blogs").send(newBlogObject);
+    await api.post("/api/blogs").send(newBlogObject).expect(201);
     const response = await api.get("/api/blogs");
 
     expect(response._body).toHaveLength(initialBlogs.length + 1);
@@ -75,7 +75,10 @@ describe("Adding New Blogs", () => {
       url: "New Url",
     };
 
-    const response = await api.post("/api/blogs").send(newBlogObject);
+    const response = await api
+      .post("/api/blogs")
+      .send(newBlogObject)
+      .expect(201);
 
     expect(response._body.likes).toBe(0);
   });
@@ -90,6 +93,20 @@ describe("Adding New Blogs", () => {
     const response = await api.post("/api/blogs").send(newBlogObject);
 
     expect(response.status).toBe(400);
+  });
+});
+
+describe("Delete a blog", () => {
+  // Test if delete a blog works
+  test("Test if delete a blog works", async () => {
+    const blogsAtStart = await api.get("/api/blogs");
+    const blogToDelete = blogsAtStart._body[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await api.get("/api/blogs");
+
+    expect(blogsAtEnd._body).toHaveLength(initialBlogs.length - 1);
   });
 });
 
