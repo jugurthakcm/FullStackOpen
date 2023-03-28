@@ -45,6 +45,24 @@ test("test if response are returned with id", async () => {
   response._body.forEach((e) => expect(e.id).toBeDefined());
 });
 
+//Test if new blogs are added properly
+test("test if new blogs are added properly", async () => {
+  const newBlogObject = {
+    title: "New Blog",
+    author: "New Author",
+    url: "New Url",
+    likes: 0,
+  };
+
+  await api.post("/api/blogs").send(newBlogObject);
+  const response = await api.get("/api/blogs");
+
+  expect(response._body).toHaveLength(initialBlogs.length + 1);
+
+  const blogsTitle = response._body.map(blog => blog.title)
+
+  expect(blogsTitle).toContain("New Blog")
+});
 // Close connection to the DB
 afterAll(async () => {
   await mongoose.connection.close();
