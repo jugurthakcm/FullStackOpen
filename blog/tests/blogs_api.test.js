@@ -1,9 +1,8 @@
-const supertest = require("supertest");
 const mongoose = require("mongoose");
-const app = require("../app");
 const Blog = require("../models/Blog");
 
-const api = supertest(app);
+const blogHelper = require("../utils/blog_helper");
+
 
 const initialBlogs = [
   {
@@ -34,14 +33,14 @@ beforeEach(async () => {
 describe("Fetching Blogs", () => {
   // Test if /api/blogs return correct amount of blogs
   test("test if /api/blogs return correct amount of blogs", async () => {
-    const response = await api.get("/api/blogs");
+    const response = await blogHelper.getBlogs();
 
     expect(response._body).toHaveLength(initialBlogs.length);
   });
 
   // Test if the response data are returned with an "id"
   test("test if response are returned with id", async () => {
-    const response = await api.get("/api/blogs");
+    const response = await blogHelper.getBlogs();
 
     response._body.forEach((e) => expect(e.id).toBeDefined());
   });
@@ -57,8 +56,9 @@ describe("Adding New Blogs", () => {
       likes: 7,
     };
 
-    await api.post("/api/blogs").send(newBlogObject).expect(201);
-    const response = await api.get("/api/blogs");
+    await blogHelper.addBlog().send(newBlogObject).expect(201);
+
+    const response = await blogHelper.getBlogs();
 
     expect(response._body).toHaveLength(initialBlogs.length + 1);
 
@@ -75,10 +75,7 @@ describe("Adding New Blogs", () => {
       url: "New Url",
     };
 
-    const response = await api
-      .post("/api/blogs")
-      .send(newBlogObject)
-      .expect(201);
+    const response = await blogHelper.addBlog().send(newBlogObject).expect(201);
 
     expect(response._body.likes).toBe(0);
   });
@@ -90,7 +87,7 @@ describe("Adding New Blogs", () => {
       title: "nwddsd",
       likes: 12,
     };
-    const response = await api.post("/api/blogs").send(newBlogObject);
+    const response = await blogHelper.addBlog().send(newBlogObject);
 
     expect(response.status).toBe(400);
   });
@@ -99,12 +96,12 @@ describe("Adding New Blogs", () => {
 describe("Delete a blog", () => {
   // Test if delete a blog works
   test("Test if delete a blog works", async () => {
-    const blogsAtStart = await api.get("/api/blogs");
+    const blogsAtStart = await blogHelper.getBlogs();
     const blogToDelete = blogsAtStart._body[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await blogHelper.deleteBlog(blogToDelete.id).expect(204);
 
-    const blogsAtEnd = await api.get("/api/blogs");
+    const blogsAtEnd = await blogHelper.getBlogs();
 
     expect(blogsAtEnd._body).toHaveLength(initialBlogs.length - 1);
   });
@@ -115,12 +112,12 @@ describe("Update a blog", () => {
   test("Test if updating likes in a blog works", async () => {
     const likes = 45;
 
-    const blogsAtStart = await api.get("/api/blogs");
+    const blogsAtStart = await blogHelper.getBlogs();
     const blogToUpdate = blogsAtStart._body[0];
 
-    await api.put(`/api/blogs/${blogToUpdate.id}`).send({likes}).expect(200);
+    await blogHelper.updateBlog(blogToUpdate.id).send({likes}).expect(200);
 
-    const blogsAtEnd = await api.get("/api/blogs");
+    const blogsAtEnd = await blogHelper.getBlogs();
 
     expect(blogsAtEnd._body[0].likes).toBe(likes);
   });
