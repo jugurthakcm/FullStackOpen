@@ -37,7 +37,6 @@ blogRoutes.put("/:id", async (request, response) => {
 
   const updatedBlog = await Blog.findByIdAndUpdate(id, {likes}, {new: true});
 
-console.log(updatedBlog)
 
   response.status(200).send(updatedBlog);
 });

@@ -110,6 +110,22 @@ describe("Delete a blog", () => {
   });
 });
 
+describe("Update a blog", () => {
+  // Test if updating likes works
+  test("Test if updating likes in a blog works", async () => {
+    const likes = 45;
+
+    const blogsAtStart = await api.get("/api/blogs");
+    const blogToUpdate = blogsAtStart._body[0];
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send({likes}).expect(200);
+
+    const blogsAtEnd = await api.get("/api/blogs");
+
+    expect(blogsAtEnd._body[0].likes).toBe(likes);
+  });
+});
+
 // Close connection to the DB
 afterAll(async () => {
   await mongoose.connection.close();
