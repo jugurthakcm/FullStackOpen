@@ -9,10 +9,14 @@ userRoutes.post("/register", async (req, res) => {
   if (!name || !username || !password)
     return res.status(400).send("name, username or password are missing");
 
+  if (username.length < 3 || password.length < 3)
+    return res
+      .status(400)
+      .send("username or password doesn't meet length requirements");
+
   const hashPassword = await bcrypt.hash(password, 10);
 
   const newUser = new User({name, username, password: hashPassword});
-
 
   const savedUser = await newUser.save();
 

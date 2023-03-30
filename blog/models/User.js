@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = new mongoose.Schema({
-  name: String,
-  username: String,
-  password: String,
+  name: {type: String, minLength: 3},
+  username: {type: String, minLength: 3, unique: true},
+  password: {type: String, minLength: 3},
 });
 
 userSchema.set("toJSON", {
@@ -14,5 +15,7 @@ userSchema.set("toJSON", {
     delete returnedObject.password;
   },
 });
+
+userSchema.plugin(uniqueValidator,{message: "{PATH} already exists"});
 
 module.exports = mongoose.model("User", userSchema);
