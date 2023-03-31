@@ -66,6 +66,17 @@ describe("Adding users", () => {
 
     await userHelper.addUser().send(newUser).expect(400);
   });
+
+  // Test if duplicate users are added
+  test("test if duplicate username is added, 400 BAD REQUEST is sent", async () => {
+    const newUser = initialUsers[0];
+
+    const response = await userHelper.addUser().send(newUser).expect(400)
+
+    expect(response._body.error).toContain('username already exists')
+
+
+  });
 });
 
 // Close connection to the database
