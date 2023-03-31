@@ -67,15 +67,24 @@ describe("Adding users", () => {
     await userHelper.addUser().send(newUser).expect(400);
   });
 
-  // Test if duplicate users are added
   test("test if duplicate username is added, 400 BAD REQUEST is sent", async () => {
     const newUser = initialUsers[0];
 
-    const response = await userHelper.addUser().send(newUser).expect(400)
+    const response = await userHelper.addUser().send(newUser).expect(400);
 
-    expect(response._body.error).toContain('username already exists')
+    expect(response._body.error).toContain("username already exists");
+  });
 
+  test("test if duplicate username or password doesn't meet length, 400 BAD REQUEST is sent", async () => {
+    const newUser = {
+      name: "full name",
+      username: "kldd",
+      password: "jd",
+    };
 
+    const response = await userHelper.addUser().send(newUser).expect(400);
+
+    expect(response._body.error).toContain("doesn't meet length requirements");
   });
 });
 

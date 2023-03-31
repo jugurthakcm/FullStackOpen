@@ -12,7 +12,7 @@ userRoutes.post("/register", async (req, res) => {
   if (username.length < 3 || password.length < 3)
     return res
       .status(400)
-      .send("username or password doesn't meet length requirements");
+      .json({error: "username or password doesn't meet length requirements"});
 
   const hashPassword = await bcrypt.hash(password, 10);
 
