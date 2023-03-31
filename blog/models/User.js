@@ -5,6 +5,12 @@ const userSchema = new mongoose.Schema({
   name: {type: String, minLength: 3},
   username: {type: String, minLength: 3, unique: true},
   password: {type: String, minLength: 3},
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog",
+    },
+  ],
 });
 
 userSchema.set("toJSON", {
@@ -16,6 +22,6 @@ userSchema.set("toJSON", {
   },
 });
 
-userSchema.plugin(uniqueValidator,{message: "{PATH} already exists"});
+userSchema.plugin(uniqueValidator, {message: "{PATH} already exists"});
 
 module.exports = mongoose.model("User", userSchema);
