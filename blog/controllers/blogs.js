@@ -37,10 +37,24 @@ blogRoutes.post("/", async (request, response) => {
   response.status(201).send("Blog created successfully");
 });
 
+// delete a blog
 blogRoutes.delete("/:id", async (request, response) => {
   const id = request.params.id;
 
   if (!id) return response.status(400).end();
+
+  const token = request.token;
+
+  if (!token) return response.status(403).send("Action forbiddent");
+
+  const userToken = jwt.verify(token, process.env.SECRET);
+
+  if (!userToken.id) return response.status(400).send("Invalid token");
+
+  const blogToDelete = await Blog.findById(id);
+
+  if (userToken.id !== blogToDelete.user.toString())
+    return response.status(403).send("Action forbidden");
 
   await Blog.findByIdAndDelete(id);
 
