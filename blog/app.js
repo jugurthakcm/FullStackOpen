@@ -10,12 +10,14 @@ const blogRoutes = require("./controllers/blogs");
 const userRoutes = require("./controllers/users");
 const loginRoutes = require("./controllers/login");
 const errorHandler = require("./middlewares/errorHandler");
+const getToken = require("./middlewares/getToken");
 
 const mongoUrl = config.MONGODB_URI;
 mongoose.connect(mongoUrl).then(() => logger.info("Connected to Database"));
 
 app.use(cors());
 app.use(express.json());
+app.use(getToken);
 
 app.use("/api/blogs", blogRoutes);
 app.use("/api/users", userRoutes);

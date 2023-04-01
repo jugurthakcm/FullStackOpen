@@ -3,16 +3,6 @@ const Blog = require("../models/Blog");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
-// Get token fron Authorization header
-const getToken = (req) => {
-  const authorization = req.get("authorization");
-
-  if (authorization && authorization.startsWith("Bearer "))
-    return authorization.replace("Bearer ", "");
-
-  return null;
-};
-
 blogRoutes.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { name: 1, username: 1 });
 
@@ -21,7 +11,7 @@ blogRoutes.get("/", async (request, response) => {
 
 // Add a blog
 blogRoutes.post("/", async (request, response) => {
-  const token = getToken(request);
+  const token = request.token;
 
   if (!request.body.title || !request.body.url || !token)
     return response.status(400).send("Can't add blog");
