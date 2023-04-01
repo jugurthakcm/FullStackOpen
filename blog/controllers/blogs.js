@@ -1,21 +1,42 @@
 const blogRoutes = require("express").Router();
 const Blog = require("../models/Blog");
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+
+// Get token fron Authorization header
+const getToken = (req) => {
+  const authorization = req.get("authorization");
+
+  if (authorization && authorization.startsWith("Bearer "))
+    return authorization.replace("Bearer ", "");
+
+  return null;
+};
 
 blogRoutes.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate("user", {name: 1, username: 1});
+  const blogs = await Blog.find({}).populate("user", { name: 1, username: 1 });
 
   response.status(200).json(blogs);
 });
 
+// Add a blog
 blogRoutes.post("/", async (request, response) => {
-  if (!request.body.title || !request.body.url)
-    return response.status(400).send("Body or Url is missing");
+  const token = getToken(request);
 
-  const user = await User.findOne({_id: request.body.userId});
+  if (!request.body.title || !request.body.url || !token)
+    return response.status(400).send("Can't add blog");
 
-  console.log(user._id);
-  const blog = new Blog({...request.body, user: user._id});
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+
+  if (!decodedToken.id) return response.status(400).send("Invalid token");
+
+  const user = await User.findOne({ _id: decodedToken.id });
+
+  const blog = new Blog({
+    ...request.body,
+    user: user._id,
+    author: user.username,
+  });
 
   const savedBlog = await blog.save();
 
@@ -39,11 +60,15 @@ blogRoutes.delete("/:id", async (request, response) => {
 blogRoutes.put("/:id", async (request, response) => {
   const id = request.params.id;
 
-  const {likes} = request.body;
+  const { likes } = request.body;
 
   if (!id || !likes) return response.status(400).end();
 
-  const updatedBlog = await Blog.findByIdAndUpdate(id, {likes}, {new: true});
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    id,
+    { likes },
+    { new: true }
+  );
 
   response.status(200).send(updatedBlog);
 });
