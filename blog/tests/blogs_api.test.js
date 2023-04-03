@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const Blog = require("../models/Blog");
+const jwt = require("jsonwebtoken");
 
 const blogHelper = require("../utils/blog_helper");
 
+const token =
+  "Bearer " + jwt.sign({username: "juujuu", id: new mongoose.Types.ObjectId()}, process.env.SECRET);
 
 const initialBlogs = [
   {
@@ -33,7 +36,7 @@ beforeEach(async () => {
 describe("Fetching Blogs", () => {
   // Test if /api/blogs return correct amount of blogs
   test("test if /api/blogs return correct amount of blogs", async () => {
-    const response = await blogHelper.getBlogs();
+    const response = await blogHelper.getBlogs().set("authorization", token);
 
     expect(response._body).toHaveLength(initialBlogs.length);
   });
@@ -51,12 +54,11 @@ describe("Adding New Blogs", () => {
   test("test if new blogs are added properly", async () => {
     const newBlogObject = {
       title: "New Blog",
-      author: "New Author",
-      url: "New Url",
+         url: "New Url",
       likes: 7,
     };
 
-    await blogHelper.addBlog().send(newBlogObject).expect(201);
+    await blogHelper.addBlog().set('authorization', token).send(newBlogObject).expect(201);
 
     const response = await blogHelper.getBlogs();
 
