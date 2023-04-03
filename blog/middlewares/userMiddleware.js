@@ -1,3 +1,6 @@
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+
 const getToken = (req, res, next) => {
   const authorization = req.get("authorization");
 
@@ -7,4 +10,15 @@ const getToken = (req, res, next) => {
   next();
 };
 
-module.exports = { getToken };
+const userExtractor = async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+
+  if (!decodedToken.id) return res.status(400).send("Invalid token");
+
+  const user = await User.findOne({_id: decodedToken.id});
+
+  req.user = user;
+
+  next();
+};
+module.exports = {getToken, userExtractor};

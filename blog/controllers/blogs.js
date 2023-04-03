@@ -4,7 +4,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 blogRoutes.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate("user", { name: 1, username: 1 });
+  const blogs = await Blog.find({}).populate("user", {name: 1, username: 1});
 
   response.status(200).json(blogs);
 });
@@ -16,11 +16,13 @@ blogRoutes.post("/", async (request, response) => {
   if (!request.body.title || !request.body.url || !token)
     return response.status(400).send("Can't add blog");
 
-  const decodedToken = jwt.verify(token, process.env.SECRET);
+  // const decodedToken = jwt.verify(token, process.env.SECRET);
 
-  if (!decodedToken.id) return response.status(400).send("Invalid token");
+  // if (!decodedToken.id) return response.status(400).send("Invalid token");
 
-  const user = await User.findOne({ _id: decodedToken.id });
+  // const user = await User.findOne({ _id: decodedToken.id });
+
+  const user = request.user;
 
   const blog = new Blog({
     ...request.body,
@@ -47,13 +49,15 @@ blogRoutes.delete("/:id", async (request, response) => {
 
   if (!token) return response.status(403).send("Action forbiddent");
 
-  const userToken = jwt.verify(token, process.env.SECRET);
+  // const userToken = jwt.verify(token, process.env.SECRET);
 
-  if (!userToken.id) return response.status(400).send("Invalid token");
+  // if (!userToken.id) return response.status(400).send("Invalid token");
+
+  const user = request.user;
 
   const blogToDelete = await Blog.findById(id);
 
-  if (userToken.id !== blogToDelete.user.toString())
+  if (user.id !== blogToDelete.user.toString())
     return response.status(403).send("Action forbidden");
 
   await Blog.findByIdAndDelete(id);
@@ -64,15 +68,11 @@ blogRoutes.delete("/:id", async (request, response) => {
 blogRoutes.put("/:id", async (request, response) => {
   const id = request.params.id;
 
-  const { likes } = request.body;
+  const {likes} = request.body;
 
   if (!id || !likes) return response.status(400).end();
 
-  const updatedBlog = await Blog.findByIdAndUpdate(
-    id,
-    { likes },
-    { new: true }
-  );
+  const updatedBlog = await Blog.findByIdAndUpdate(id, {likes}, {new: true});
 
   response.status(200).send(updatedBlog);
 });
