@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Blog = require("../models/Blog");
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
+
 
 const blogHelper = require("../utils/blog_helper");
 const userHelper = require("../utils/user_test_helper");
