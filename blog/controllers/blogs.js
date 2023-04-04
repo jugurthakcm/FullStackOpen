@@ -13,7 +13,9 @@ blogRoutes.get("/", async (request, response) => {
 blogRoutes.post("/", async (request, response) => {
   const token = request.token;
 
-  if (!request.body.title || !request.body.url || !token)
+  if (!token) return response.status(401).send("Unauthorized action");
+
+  if (!request.body.title || !request.body.url)
     return response.status(400).send("Can't add blog");
 
   // const decodedToken = jwt.verify(token, process.env.SECRET);

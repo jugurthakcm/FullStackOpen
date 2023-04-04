@@ -83,7 +83,10 @@ describe("Adding New Blogs", () => {
       .send(newBlogObject)
       .expect(201);
 
-    const response = await blogHelper.getBlogs().set("authorization", `Bearer ${token}`).expect(200);
+    const response = await blogHelper
+      .getBlogs()
+      .set("authorization", `Bearer ${token}`)
+      .expect(200);
 
     expect(response._body).toHaveLength(initialBlogs.length + 1);
 
@@ -115,6 +118,16 @@ describe("Adding New Blogs", () => {
     const response = await blogHelper.addBlog().send(newBlogObject);
 
     expect(response.status).toBe(400);
+  });
+
+  test("Test if no token provided 401 Unauthorized is sent when add new blog", async () => {
+    const newBlogObject = {
+      title: "New Blog",
+      url: "New Url",
+      likes: 7,
+    };
+
+    await blogHelper.addBlog().send(newBlogObject).expect(401);
   });
 });
 
