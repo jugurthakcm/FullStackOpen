@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 const Blog = require("../models/Blog");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const blogHelper = require("../utils/blog_helper");
-
-const token =
-  "Bearer " + jwt.sign({username: "juujuu", id: new mongoose.Types.ObjectId()}, process.env.SECRET);
+const userHelper = require("../utils/user_test_helper");
 
 const initialBlogs = [
   {
@@ -22,8 +21,17 @@ const initialBlogs = [
   },
 ];
 
+const initialUser = {
+  name: "juuju ka",
+  username: "juujuu",
+  password: "password",
+};
+
+let token = "";
+
 // Initialize the database
 beforeEach(async () => {
+  // Initialize blogs
   await Blog.deleteMany({});
 
   const blogObjects = initialBlogs.map((blog) => new Blog(blog));
@@ -31,12 +39,23 @@ beforeEach(async () => {
   const promiseArray = blogObjects.map((blog) => blog.save());
 
   await Promise.all(promiseArray);
+
+  // Initialize User
+  await User.deleteMany({});
+
+  await userHelper.addUser().send(initialUser);
+
+  const loggedUser = await userHelper
+    .loginUser()
+    .send({username: initialUser.username, password: initialUser.password});
+
+  token = loggedUser._body.token;
 });
 
 describe("Fetching Blogs", () => {
   // Test if /api/blogs return correct amount of blogs
   test("test if /api/blogs return correct amount of blogs", async () => {
-    const response = await blogHelper.getBlogs().set("authorization", token);
+    const response = await blogHelper.getBlogs();
 
     expect(response._body).toHaveLength(initialBlogs.length);
   });
@@ -54,13 +73,17 @@ describe("Adding New Blogs", () => {
   test("test if new blogs are added properly", async () => {
     const newBlogObject = {
       title: "New Blog",
-         url: "New Url",
+      url: "New Url",
       likes: 7,
     };
 
-    await blogHelper.addBlog().set('authorization', token).send(newBlogObject).expect(201);
+    await blogHelper
+      .addBlog()
+      .set("authorization", `Bearer ${token}`)
+      .send(newBlogObject)
+      .expect(201);
 
-    const response = await blogHelper.getBlogs();
+    const response = await blogHelper.getBlogs().set("authorization", `Bearer ${token}`).expect(200);
 
     expect(response._body).toHaveLength(initialBlogs.length + 1);
 

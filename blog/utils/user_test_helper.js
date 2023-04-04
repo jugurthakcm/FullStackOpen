@@ -7,4 +7,6 @@ const addUser = () => api.post("/api/users/register");
 
 const getUsers = () => api.get("/api/users");
 
-module.exports = {addUser, getUsers};
+const loginUser = () => api.post("/login");
+
+module.exports = {addUser, getUsers, loginUser};
