@@ -24,6 +24,11 @@ const App = () => {
     }
   };
 
+  const handleLogOut = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
   useEffect(() => {
     const loggedUserJson = localStorage.getItem("user");
     loggedUserJson && setUser(JSON.parse(loggedUserJson));
@@ -41,6 +46,11 @@ const App = () => {
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
+
+          <p>
+            {user.username} is logged in{" "}
+            <button onClick={handleLogOut}>Log Out</button>
+          </p>
         </>
       ) : (
         <>
