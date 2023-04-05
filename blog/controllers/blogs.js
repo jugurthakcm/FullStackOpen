@@ -1,7 +1,6 @@
 const blogRoutes = require("express").Router();
 const Blog = require("../models/Blog");
 
-
 blogRoutes.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", {name: 1, username: 1});
 
@@ -37,7 +36,7 @@ blogRoutes.post("/", async (request, response) => {
 
   await user.save();
 
-  response.status(201).send("Blog created successfully");
+  response.status(201).send(savedBlog);
 });
 
 // delete a blog
