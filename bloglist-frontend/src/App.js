@@ -18,14 +18,19 @@ const App = () => {
       setUser(loggedUser);
       setUsername("");
       setPassword("");
+      localStorage.setItem("user", JSON.stringify(loggedUser));
     } catch (error) {
       console.error(error.response.data.error);
     }
   };
 
   useEffect(() => {
-    user &&
-      blogService.getAll(user.token).then((blogs) => setBlogs(blogs));
+    const loggedUserJson = localStorage.getItem("user");
+    loggedUserJson && setUser(JSON.parse(loggedUserJson));
+  }, []);
+
+  useEffect(() => {
+    user && blogService.getAll(user.token).then((blogs) => setBlogs(blogs));
   }, [user]);
 
   return (
