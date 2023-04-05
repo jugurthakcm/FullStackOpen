@@ -5,6 +5,7 @@ import blogService from "./services/blogs";
 import Login from "./components/Login";
 import {login} from "./services/login";
 import Alert from "./components/Alert";
+import Toggleable from "./components/Toggleable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -45,7 +46,6 @@ const App = () => {
     } catch (error) {
       setErrorMessage(error.response.data.error);
       setTimeout(() => setErrorMessage(""), 3000);
-    
     }
   };
 
@@ -96,19 +96,20 @@ const App = () => {
             {user.username} is logged in{" "}
             <button onClick={handleLogOut}>Log Out</button>
           </p>
-
-          <CreateBlog
-            handleAddBlog={handleAddBlog}
-            title={title}
-            setTitle={setTitle}
-            url={url}
-            setUrl={setUrl}
-          />
+          <Toggleable buttonLabel={"create"}>
+            <CreateBlog
+              handleAddBlog={handleAddBlog}
+              title={title}
+              setTitle={setTitle}
+              url={url}
+              setUrl={setUrl}
+            />
+          </Toggleable>
         </>
       ) : (
         <>
           <h2>Login</h2>
-         {errorMessage && <Alert message={errorMessage} style={errorStyle} />}
+          {errorMessage && <Alert message={errorMessage} style={errorStyle} />}
           <Login
             handleSubmit={handleSubmit}
             username={username}
