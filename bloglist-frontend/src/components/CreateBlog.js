@@ -1,6 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 
-const CreateBlog = ({handleAddBlog, setTitle, setUrl, title, url}) => {
+const CreateBlog = ({addBlog}) => {
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
+
+  const handleAddBlog = (e) => {
+    e.preventDefault();
+    addBlog(title, url);
+    setTitle("");
+    setUrl("");
+  };
+
   return (
     <>
       <h2>createBlog</h2>

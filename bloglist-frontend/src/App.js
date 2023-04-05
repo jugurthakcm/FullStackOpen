@@ -12,8 +12,6 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -54,19 +52,16 @@ const App = () => {
     setUser(null);
   };
 
-  const handleAddBlog = async (e) => {
+  const addBlog = async (title, url) => {
     try {
-      e.preventDefault();
       const addedBlog = await blogService.addBlog(title, url, user.token);
       setBlogs([...blogs, addedBlog]);
-      setTitle("");
-      setUrl("");
+
       setSuccessMessage("Blog Added Successfully");
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       setErrorMessage(error.response.data);
       setTimeout(() => setErrorMessage(""), 3000);
-      console.error(error.response.data);
     }
   };
 
@@ -97,13 +92,7 @@ const App = () => {
             <button onClick={handleLogOut}>Log Out</button>
           </p>
           <Toggleable buttonLabel={"create"}>
-            <CreateBlog
-              handleAddBlog={handleAddBlog}
-              title={title}
-              setTitle={setTitle}
-              url={url}
-              setUrl={setUrl}
-            />
+            <CreateBlog addBlog={addBlog} />
           </Toggleable>
         </>
       ) : (
