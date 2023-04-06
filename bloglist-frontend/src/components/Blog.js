@@ -34,7 +34,9 @@ const Blog = ({blog, incrementLikes, deleteBlog}) => {
         </button>
         {toggleView ? (
           <div>
-            <p>{blog.url}</p>
+            <a href={`http://${blog.url}`} target="_blank" rel="noreferrer">
+              {blog.url}
+            </a>
             <p>
               {blog.likes}{" "}
               <button onClick={() => handleLike(blog.likes)}>Like</button>
