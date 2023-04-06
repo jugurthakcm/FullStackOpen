@@ -14,7 +14,7 @@ const Blog = ({blog}) => {
   return (
     <div style={blogStyle}>
       <div>
-        {blog.title}{" "}
+        {blog.title} {blog.author}
         <button onClick={() => setToggleView(!toggleView)}>
           {!toggleView ? "View" : "Hide"}
         </button>
@@ -24,7 +24,7 @@ const Blog = ({blog}) => {
             <p>
               {blog.likes} <button>Like</button>
             </p>
-            <p>{blog.author}</p>
+            <p>{blog.user.name}</p>
           </div>
         ) : (
           <></>
