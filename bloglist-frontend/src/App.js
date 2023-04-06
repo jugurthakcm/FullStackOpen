@@ -52,9 +52,9 @@ const App = () => {
     setUser(null);
   };
 
-  const addBlog = async (title, url) => {
+  const addBlog = async (title,author, url) => {
     try {
-      const addedBlog = await blogService.addBlog(title, url, user.token);
+      const addedBlog = await blogService.addBlog(title, author, url, user.token);
       setBlogs([...blogs, addedBlog]);
 
       setSuccessMessage("Blog Added Successfully");

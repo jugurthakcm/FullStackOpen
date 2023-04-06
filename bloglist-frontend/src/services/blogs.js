@@ -7,8 +7,8 @@ const getAll = (token) => {
   return request.then((response) => response.data);
 };
 
-const addBlog =  (title, url, token) => {
-  const request =  axios.post(baseUrl, {title, url}, setToken(token));
+const addBlog = (title, author, url, token) => {
+  const request = axios.post(baseUrl, {title, author, url}, setToken(token));
 
   return request.then((res) => res.data);
 };

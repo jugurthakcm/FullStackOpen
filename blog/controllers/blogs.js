@@ -13,7 +13,7 @@ blogRoutes.post("/", async (request, response) => {
 
   if (!token) return response.status(401).send("Unauthorized action");
 
-  if (!request.body.title || !request.body.url)
+  if (!request.body.title || !request.body.url || !request.body.author)
     return response.status(400).send("Can't add blog");
 
   // const decodedToken = jwt.verify(token, process.env.SECRET);
@@ -27,7 +27,6 @@ blogRoutes.post("/", async (request, response) => {
   const blog = new Blog({
     ...request.body,
     user: user._id,
-    author: user.username,
   });
 
   const savedBlog = await blog.save();

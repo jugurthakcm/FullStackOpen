@@ -2,12 +2,15 @@ import React, {useState} from "react";
 
 const CreateBlog = ({addBlog}) => {
   const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+
 
   const handleAddBlog = (e) => {
     e.preventDefault();
-    addBlog(title, url);
+    addBlog(title,author, url);
     setTitle("");
+    setAuthor("")
     setUrl("");
   };
 
@@ -21,6 +24,14 @@ const CreateBlog = ({addBlog}) => {
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+        />
+        <br />
+        <input
+          name="title"
+          type="text"
+          placeholder="Author"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
         />
         <br />
         <input
