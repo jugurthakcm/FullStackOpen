@@ -87,7 +87,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    user && blogService.getAll(user.token).then((blogs) => setBlogs(blogs));
+    user && blogService.getAll(user.token).then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
   }, [user]);
 
   return (
@@ -99,9 +99,11 @@ const App = () => {
             <Alert message={successMessage} style={successStyle} />
           )}
           {errorMessage && <Alert message={errorMessage} style={errorStyle} />}
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} incrementLikes={incrementLikes}/>
-          ))}
+          {blogs
+            
+            .map((blog) => (
+              <Blog key={blog.id} blog={blog} incrementLikes={incrementLikes} />
+            ))}
 
           <p>
             {user.username} is logged in{" "}
