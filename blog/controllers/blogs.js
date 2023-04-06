@@ -35,7 +35,12 @@ blogRoutes.post("/", async (request, response) => {
 
   await user.save();
 
-  response.status(201).send(savedBlog);
+  const returnedBlog = await Blog.findById(savedBlog._id).populate("user", {
+    name: 1,
+    username: 1,
+  });
+
+  response.status(201).send(returnedBlog);
 });
 
 // delete a blog
