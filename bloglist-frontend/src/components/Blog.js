@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const Blog = ({blog, incrementLikes}) => {
+const Blog = ({blog, incrementLikes, deleteBlog}) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,10 +10,19 @@ const Blog = ({blog, incrementLikes}) => {
   };
 
   const [toggleView, setToggleView] = useState(false);
- 
 
   const handleLike = () => {
     incrementLikes(blog.id, blog.likes + 1);
+  };
+
+  const handleDelete = () => {
+    const confirm = window.confirm(
+      `Remove blog ${blog.title} by ${blog.author}`
+    );
+
+    if (!confirm) return null;
+
+    deleteBlog(blog.id);
   };
 
   return (
@@ -31,6 +40,7 @@ const Blog = ({blog, incrementLikes}) => {
               <button onClick={() => handleLike(blog.likes)}>Like</button>
             </p>
             <p>{blog.user.name}</p>
+            <button onClick={handleDelete}>delete</button>
           </div>
         ) : (
           <></>

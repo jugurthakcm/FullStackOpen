@@ -18,5 +18,12 @@ const updateLike = (id, likes, token) => {
 
   return request.then((res) => res.data);
 };
+
+const deleteBlog = (id, token) => {
+  const request = axios.delete(`${baseUrl}/${id}`, setToken(token));
+
+  return request.then((res) => res.data);
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default {getAll, addBlog, updateLike};
+export default {getAll, addBlog, updateLike, deleteBlog};

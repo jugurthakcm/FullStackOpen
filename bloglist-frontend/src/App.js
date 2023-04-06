@@ -75,11 +75,27 @@ const App = () => {
       await blogService.updateLike(id, likes, user.token);
       const blogs = await blogService.getAll(user.token);
       setBlogs(blogs);
+      
     } catch (error) {
       setErrorMessage(error.response.data);
       setTimeout(() => setErrorMessage(""), 3000);
     }
   };
+
+
+  const deleteBlog = async(id)=>{
+    try {
+      await blogService.deleteBlog(id, user.token);
+      const blogs = await blogService.getAll(user.token);
+      setBlogs(blogs);
+
+      setSuccessMessage("Blog Deleted Successfully");
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (error) {
+      setErrorMessage(error.response.data);
+      setTimeout(() => setErrorMessage(""), 3000);
+    }
+  }
 
   useEffect(() => {
     const loggedUserJson = localStorage.getItem("user");
@@ -102,7 +118,7 @@ const App = () => {
           {blogs
             
             .map((blog) => (
-              <Blog key={blog.id} blog={blog} incrementLikes={incrementLikes} />
+              <Blog key={blog.id} blog={blog} incrementLikes={incrementLikes} deleteBlog={deleteBlog}/>
             ))}
 
           <p>

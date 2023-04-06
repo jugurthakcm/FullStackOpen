@@ -51,7 +51,7 @@ blogRoutes.delete("/:id", async (request, response) => {
 
   const token = request.token;
 
-  if (!token) return response.status(403).send("Action forbiddent");
+  if (!token) return response.status(403).send("Action forbidden");
 
   // const userToken = jwt.verify(token, process.env.SECRET);
 
