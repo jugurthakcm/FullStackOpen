@@ -27,7 +27,7 @@ const Blog = ({blog, incrementLikes, deleteBlog}) => {
 
   return (
     <div style={blogStyle}>
-      <div>
+      <div className="blog">
         {blog.title} {blog.author}
         <button onClick={() => setToggleView(!toggleView)}>
           {!toggleView ? "View" : "Hide"}
