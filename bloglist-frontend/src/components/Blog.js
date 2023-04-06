@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const Blog = ({blog}) => {
+const Blog = ({blog, incrementLikes}) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,6 +10,11 @@ const Blog = ({blog}) => {
   };
 
   const [toggleView, setToggleView] = useState(false);
+ 
+
+  const handleLike = () => {
+    incrementLikes(blog.id, blog.likes + 1);
+  };
 
   return (
     <div style={blogStyle}>
@@ -22,7 +27,8 @@ const Blog = ({blog}) => {
           <div>
             <p>{blog.url}</p>
             <p>
-              {blog.likes} <button>Like</button>
+              {blog.likes}{" "}
+              <button onClick={() => handleLike(blog.likes)}>Like</button>
             </p>
             <p>{blog.user.name}</p>
           </div>

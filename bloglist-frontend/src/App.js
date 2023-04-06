@@ -52,13 +52,29 @@ const App = () => {
     setUser(null);
   };
 
-  const addBlog = async (title,author, url) => {
+  const addBlog = async (title, author, url) => {
     try {
-      const addedBlog = await blogService.addBlog(title, author, url, user.token);
+      const addedBlog = await blogService.addBlog(
+        title,
+        author,
+        url,
+        user.token
+      );
       setBlogs([...blogs, addedBlog]);
 
       setSuccessMessage("Blog Added Successfully");
       setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (error) {
+      setErrorMessage(error.response.data);
+      setTimeout(() => setErrorMessage(""), 3000);
+    }
+  };
+
+  const incrementLikes = async (id, likes) => {
+    try {
+      await blogService.updateLike(id, likes, user.token);
+      const blogs = await blogService.getAll(user.token);
+      setBlogs(blogs);
     } catch (error) {
       setErrorMessage(error.response.data);
       setTimeout(() => setErrorMessage(""), 3000);
@@ -84,7 +100,7 @@ const App = () => {
           )}
           {errorMessage && <Alert message={errorMessage} style={errorStyle} />}
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} incrementLikes={incrementLikes}/>
           ))}
 
           <p>

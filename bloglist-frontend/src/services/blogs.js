@@ -12,5 +12,11 @@ const addBlog = (title, author, url, token) => {
 
   return request.then((res) => res.data);
 };
+
+const updateLike = (id, likes, token) => {
+  const request = axios.put(`${baseUrl}/${id}`, {likes}, setToken(token));
+
+  return request.then((res) => res.data);
+};
 // eslint-disable-next-line import/no-anonymous-default-export
-export default {getAll, addBlog};
+export default {getAll, addBlog, updateLike};
