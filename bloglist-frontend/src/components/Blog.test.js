@@ -1,29 +1,47 @@
 import React from "react";
-import '@testing-library/jest-dom/extend-expect'
-import {render, screen} from '@testing-library/react'
-import Blog from './Blog'
+import "@testing-library/jest-dom/extend-expect";
+import {render, screen} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Blog from "./Blog";
 
+const initialBlog = {
+  title: "Javascript Creation",
+  url: "www.javascript.com",
+  likes: 12,
+  author: "Steve",
+  user: {
+    name: "Jugurtha Kacimi",
+  },
+};
 
-test('renders title of the blog', ()=>{
-    const blog = {
-        title: "Javascript Creation",
-        url: "www.javascript.com",
-        likes: 12,
-        author: "Jugurtha Kacimi"
-    }
+test("renders title of the blog", () => {
+  render(<Blog blog={initialBlog} />);
 
-    render(<Blog blog={blog}/>)
+  const titleAuthor = screen.getByText("Javascript Creation Steve");
 
-    const titleAuthor = screen.getByText('Javascript Creation Jugurtha Kacimi')
-// const url = screen.getByText("www.javascript.com")
-// const likes = screen.getByText("12")
+  expect(titleAuthor).toBeDefined();
+});
 
+describe("Toggle View", () => {
+  test("if likes and url aren't shown in the beginning", () => {
+    render(<Blog blog={initialBlog} />);
+    const url = screen.queryByText("www.javascript.com");
+    const likes = screen.queryByText("12");
+    expect(url).toBeNull();
+    expect(likes).toBeNull();
+  });
 
-expect(titleAuthor).toBeDefined()
-// expect(url).not.toBeDefined()
-// expect(likes).not.toBeDefined()
+  test("if view button is clicked then url and likes will be rendered", async () => {
+    render(<Blog blog={initialBlog} />);
+    const user = userEvent.setup();
+    const button = screen.getByText("View");
 
+    await user.click(button);
 
+    const url = screen.queryByText("www.javascript.com");
+    const likes = screen.queryByText("12");
 
-
-})
+    expect(url).toBeVisible();
+    expect(likes).toBeVisible();
+  });
+});
