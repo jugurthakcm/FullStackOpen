@@ -1,6 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import {render, screen} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
 
@@ -44,4 +44,22 @@ describe("Toggle View", () => {
     expect(url).toBeVisible();
     expect(likes).toBeVisible();
   });
+});
+
+test("if like button is clicked twice then component receive two event handlers", async () => {
+  const mockHandler = jest.fn();
+  render(<Blog blog={initialBlog} incrementLikes={mockHandler} />);
+
+  const user = userEvent.setup();
+  const button = screen.getByText("View");
+
+  await user.click(button);
+
+  const likeButton = screen.getByText("Like");
+  await user.click(likeButton);
+  await user.click(likeButton);
+
+  console.log(mockHandler);
+
+  expect(mockHandler.mock.calls).toHaveLength(2);
 });
