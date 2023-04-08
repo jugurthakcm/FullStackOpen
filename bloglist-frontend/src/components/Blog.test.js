@@ -3,6 +3,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
+import CreateBlog from "./CreateBlog";
 
 const initialBlog = {
   title: "Javascript Creation",
@@ -59,7 +60,30 @@ test("if like button is clicked twice then component receive two event handlers"
   await user.click(likeButton);
   await user.click(likeButton);
 
-  console.log(mockHandler);
-
   expect(mockHandler.mock.calls).toHaveLength(2);
+});
+
+test("if create blog form updates parent state and calls onSubmit", async () => {
+  const createBlog = jest.fn();
+
+  const user = userEvent.setup();
+
+  render(<CreateBlog addBlog={createBlog} />);
+
+  const title = screen.getByPlaceholderText("Title");
+  const author = screen.getByPlaceholderText("Author");
+  const url = screen.getByPlaceholderText("Url");
+
+  const submit = screen.getByText("Submit");
+
+  await user.type(title, "Javascript Creation");
+  await user.type(author, "Steve");
+  await user.type(url, "www.javascript.com");
+
+  await user.click(submit);
+
+  expect(createBlog.mock.calls).toHaveLength(1);
+  expect(createBlog.mock.calls[0][0]).toBe("Javascript Creation");
+  expect(createBlog.mock.calls[0][1]).toBe("Steve");
+  expect(createBlog.mock.calls[0][2]).toBe("www.javascript.com");
 });
