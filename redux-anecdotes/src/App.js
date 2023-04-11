@@ -1,12 +1,22 @@
+import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 
 const App = () => {
+  const [newAnecdote, setNewAnecdote] = useState("");
   const anecdotes = useSelector((state) => state);
 
   const dispatch = useDispatch();
 
   const vote = (id) => {
     dispatch({type: "VOTE", payload: {id}});
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch({type: "CREATE", payload: {content: newAnecdote}});
+
+    setNewAnecdote("");
   };
 
   return (
@@ -22,11 +32,14 @@ const App = () => {
         </div>
       ))}
       <h2>create new</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
-          <input />
+          <input
+            value={newAnecdote}
+            onChange={(e) => setNewAnecdote(e.target.value)}
+          />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
   );
