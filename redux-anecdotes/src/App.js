@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
+import { createAnecdotes, incrementVote } from "./reducers/anecdoteReducer";
 
 const App = () => {
   const [newAnecdote, setNewAnecdote] = useState("");
@@ -10,13 +11,13 @@ const App = () => {
   const dispatch = useDispatch();
 
   const vote = (id) => {
-    dispatch({type: "VOTE", payload: {id}});
+    dispatch(incrementVote(id));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch({type: "CREATE", payload: {content: newAnecdote}});
+    dispatch(createAnecdotes(newAnecdote));
 
     setNewAnecdote("");
   };

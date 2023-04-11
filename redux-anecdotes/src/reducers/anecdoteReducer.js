@@ -19,6 +19,16 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject);
 
+// action-creators
+export const incrementVote = (id) => {
+  return {type: "VOTE", payload: {id}};
+};
+
+export const createAnecdotes = (content) => {
+  return {type: "CREATE", payload: {content}};
+};
+
+//reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "VOTE":
