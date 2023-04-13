@@ -1,15 +1,12 @@
 import React from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {incrementVote} from "../reducers/anecdoteReducer";
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
 
   const filter = useSelector((state) => state.filter);
 
-  const anecdotes = useSelector((state) =>
-    state.anecdotes.sort((a, b) => b.votes - a.votes)
-  );
+  const anecdotes = useSelector((state) => state.anecdotes);
 
   const filteredAnecdotes =
     filter !== ""
@@ -17,7 +14,7 @@ const AnecdoteList = () => {
       : anecdotes;
 
   const vote = (id) => {
-    dispatch(incrementVote(id));
+    dispatch({type: "anecdotes/incrementVote", payload: {id}});
   };
   return (
     <div>
