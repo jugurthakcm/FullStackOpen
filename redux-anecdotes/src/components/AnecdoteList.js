@@ -1,10 +1,17 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
+import anecdoteService from "../services/anecdoteService";
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
 
   const filter = useSelector((state) => state.filter);
+
+  useEffect(() => {
+    anecdoteService
+      .getAll()
+      .then((res) => dispatch({type: "anecdotes/getAnecdotes", payload: res}));
+  }, [dispatch]);
 
   const anecdotes = useSelector((state) => state.anecdotes);
 
