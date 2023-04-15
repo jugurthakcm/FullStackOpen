@@ -21,5 +21,11 @@ const createAnecdote = async (content) => {
   return response;
 };
 
+const incrementVote = async (anecdote) => {
+  const response = await axios.put(`${baseUrl}/${anecdote.id}`, anecdote);
+
+  return response.data;
+};
+
 // eslint-disable-next-line
-export default { getAll, createAnecdote };
+export default { getAll, createAnecdote, incrementVote };

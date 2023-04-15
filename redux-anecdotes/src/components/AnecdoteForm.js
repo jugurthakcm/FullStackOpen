@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {useDispatch} from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import anecdoteService from "../services/anecdoteService";
 
 const AnecdoteForm = () => {
@@ -10,13 +10,11 @@ const AnecdoteForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await anecdoteService.createAnecdote(newAnecdote);
-
-    console.log(response);
+    await anecdoteService.createAnecdote(newAnecdote);
 
     dispatch({
       type: "anecdotes/createAnecdotes",
-      payload: {content: newAnecdote},
+      payload: { content: newAnecdote },
     });
 
     setNewAnecdote("");
