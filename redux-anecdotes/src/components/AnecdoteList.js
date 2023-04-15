@@ -35,6 +35,15 @@ const AnecdoteList = () => {
       .then((res) =>
         dispatch({ type: "anecdotes/incrementVote", payload: res })
       );
+
+    dispatch({
+      type: "notification/showNotification",
+      payload: "You have voted",
+    });
+
+    setTimeout(() => {
+      dispatch({ type: "notification/clearNotification" });
+    }, 5000);
   };
   return (
     <div>

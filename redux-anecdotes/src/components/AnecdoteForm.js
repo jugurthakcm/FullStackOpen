@@ -10,14 +10,23 @@ const AnecdoteForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await anecdoteService.createAnecdote(newAnecdote);
+    const response = await anecdoteService.createAnecdote(newAnecdote);
 
     dispatch({
       type: "anecdotes/createAnecdotes",
-      payload: { content: newAnecdote },
+      payload: response,
+    });
+
+    dispatch({
+      type: "notification/showNotification",
+      payload: "Anecdote Created",
     });
 
     setNewAnecdote("");
+
+    setTimeout(() => {
+      dispatch({ type: "notification/clearNotification" });
+    }, 5000);
   };
   return (
     <>
