@@ -16,8 +16,6 @@ const App = () => {
     retry: 1,
   });
 
-  console.log(result);
-
   if (result.isLoading) return <div>Loading data...</div>;
 
   if (result.isError) return <div>Problem communicating with the server</div>;

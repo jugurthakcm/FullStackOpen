@@ -7,3 +7,11 @@ export const getAnecdotes = async () => {
 
   return response.data;
 };
+
+export const addAnecdote = async (content) => {
+  const newAnecdote = { content, votes: 0 };
+
+  const response = await axios.post(baseUrl, newAnecdote);
+
+  return response.data;
+};
