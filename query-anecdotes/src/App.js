@@ -1,14 +1,17 @@
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
 
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
-import { getAnecdotes } from "./services/anecdotes";
+import { getAnecdotes, incrementVote } from "./services/anecdotes";
 
 const App = () => {
-  const handleVote = (anecdote) => {
-    console.log("vote");
-  };
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (anecdote) => incrementVote(anecdote),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["anecdotes"] }),
+  });
 
   const result = useQuery({
     queryKey: ["anecdotes"],
@@ -21,6 +24,15 @@ const App = () => {
   if (result.isError) return <div>Problem communicating with the server</div>;
 
   const anecdotes = result.data;
+
+  const handleVote = (anecdote) => {
+    const changedAnecdote = {
+      ...anecdote,
+      votes: anecdote.votes + 1,
+    };
+
+    mutation.mutate(changedAnecdote);
+  };
 
   return (
     <div>
