@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import { useNavigate } from "react-router-dom"
+import {useNavigate} from "react-router-dom";
 import {Route, Routes, useMatch} from "react-router-dom";
 import Menu from "./components/Menu";
 import AnecdoteList from "./components/AnecdoteList";
@@ -8,20 +8,29 @@ import CreateNew from "./components/CreateNew";
 import Footer from "./components/Footer";
 import Anecdote from "./components/Anecdote";
 import AnecdoteContext from "./context/AnecdotesContext";
+import notificationContext from "./context/NotificationContext";
 
 const App = () => {
   const [anecdotes, dispatchAnecdotes] = useContext(AnecdoteContext);
-  const navigate = useNavigate()
-  const [notification, setNotification] = useState("");
+  const navigate = useNavigate();
+  const [notification, dispatchNotification] = useContext(notificationContext);
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000);
     dispatchAnecdotes({type: "ADD", payload: anecdote});
+    dispatchNotification({
+      type: "showNotification",
+      payload: `A new anecdote ${anecdote.content} has been created!`,
+    });
 
-    navigate('/')
+    navigate("/");
+
+    setTimeout(() => {
+      dispatchNotification({type: "clearNotification"});
+    }, 5000);
   };
 
-  const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
+  // const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
 
   // const vote = (id) => {
   //   const anecdote = anecdoteById(id);
@@ -44,6 +53,8 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+
+      {notification.visible && <p>{notification.content}</p>}
 
       <Routes>
         <Route
