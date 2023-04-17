@@ -1,18 +1,19 @@
+import { useContext } from "react";
+import notificationContext from "../context/NotificationContext";
+
 const Notification = () => {
   const style = {
-    border: 'solid',
+    border: "solid",
     padding: 10,
     borderWidth: 1,
-    marginBottom: 5
-  }
-  
-  if (true) return null
+    marginBottom: 5,
+  };
+
+  const notification = useContext(notificationContext)[0];
 
   return (
-    <div style={style}>
-      
-    </div>
-  )
-}
+    notification.visible && <div style={style}>{notification.content}</div>
+  );
+};
 
-export default Notification
+export default Notification;

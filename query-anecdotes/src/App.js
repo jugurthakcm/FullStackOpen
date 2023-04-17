@@ -1,5 +1,7 @@
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
+import { useContext } from "react";
+import notificationContext from "./context/NotificationContext";
 
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
@@ -7,6 +9,8 @@ import { getAnecdotes, incrementVote } from "./services/anecdotes";
 
 const App = () => {
   const queryClient = useQueryClient();
+
+  const dispatch = useContext(notificationContext)[1];
 
   const mutation = useMutation({
     mutationFn: (anecdote) => incrementVote(anecdote),
@@ -32,6 +36,12 @@ const App = () => {
     };
 
     mutation.mutate(changedAnecdote);
+
+    dispatch({ type: "showNotification", payload: "You have voted" });
+
+    setTimeout(() => {
+      dispatch({ type: "clearNotification" });
+    }, 3000);
   };
 
   return (
