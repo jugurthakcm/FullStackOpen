@@ -1,30 +1,28 @@
 import axios from "axios";
 
-const baseUrl = "https://api.jsonbin.io/v3/b/643820e7ebd26539d0aa5980";
-
-const getId = () => (100000 * Math.random()).toFixed(0);
-
-const headers = {
-  "X-Master-Key":
-    "$2b$10$d0Kl3KE1eyTrfI7mjLSXk.IWEic17C/yVOOW.iAEk71ZcjcYVbP96",
-};
+const baseUrl = "http://localhost:3001/anecdotes";
 
 const getAll = async () => {
-  const response = await axios.get(`${baseUrl}`, {headers});
+  const response = await axios.get(baseUrl);
 
-  return response.data.record;
+  return response.data;
 };
 
 const createAnecdote = async (content) => {
   const anecdoteObject = {
-    id: getId(),
     content,
     votes: 0,
   };
-  const response = await axios.post(baseUrl, anecdoteObject, {headers});
+  const response = await axios.post(baseUrl, anecdoteObject);
 
-  return response;
+  return response.data;
+};
+
+const incrementVote = async (anecdote) => {
+  const response = await axios.put(`${baseUrl}/${anecdote.id}`, anecdote);
+
+  return response.data;
 };
 
 // eslint-disable-next-line
-export default {getAll, createAnecdote};
+export default { getAll, createAnecdote, incrementVote };

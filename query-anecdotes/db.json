@@ -1,0 +1,9 @@
+{
+  "anecdotes": [
+    {
+      "content": "hello world",
+      "votes": 4,
+      "id": 1
+    }
+  ]
+}

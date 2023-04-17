@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {useDispatch} from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import anecdoteService from "../services/anecdoteService";
 
 const AnecdoteForm = () => {
@@ -12,14 +12,21 @@ const AnecdoteForm = () => {
 
     const response = await anecdoteService.createAnecdote(newAnecdote);
 
-    console.log(response);
-
     dispatch({
       type: "anecdotes/createAnecdotes",
-      payload: {content: newAnecdote},
+      payload: response,
+    });
+
+    dispatch({
+      type: "notification/showNotification",
+      payload: "Anecdote Created",
     });
 
     setNewAnecdote("");
+
+    setTimeout(() => {
+      dispatch({ type: "notification/clearNotification" });
+    }, 5000);
   };
   return (
     <>

@@ -1,0 +1,24 @@
+{
+  "anecdotes": [
+    {
+      "content": "juuju",
+      "votes": 13,
+      "id": 1
+    },
+    {
+      "content": "jjjdjlskdl",
+      "votes": 12,
+      "id": 2
+    },
+    {
+      "content": "jj",
+      "votes": 1,
+      "id": 3
+    },
+    {
+      "content": "k",
+      "votes": 0,
+      "id": 4
+    }
+  ]
+}
