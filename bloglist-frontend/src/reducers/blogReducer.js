@@ -7,8 +7,7 @@ const blogSlice = createSlice({
   initialState,
   reducers: {
     getBlogs(state, action) {
-     
-      return [...state, ...action.payload];
+      return [ ...action.payload];
     },
   },
 });

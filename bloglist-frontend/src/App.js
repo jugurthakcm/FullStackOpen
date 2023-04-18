@@ -10,11 +10,11 @@ import {useDispatch, useSelector} from "react-redux";
 
 const App = () => {
   const blogs = useSelector((state) => state.blog);
-
+  const {user} = useSelector((state) => state.user);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -42,7 +42,7 @@ const App = () => {
 
     try {
       const loggedUser = await login(username, password);
-      setUser(loggedUser);
+      dispatch({type: "user/loginUser", payload: loggedUser});
       setUsername("");
       setPassword("");
       localStorage.setItem("user", JSON.stringify(loggedUser));
@@ -52,9 +52,17 @@ const App = () => {
     }
   };
 
+  //Login User
+  useEffect(() => {
+    const loggedUserJson = localStorage.getItem("user");
+    loggedUserJson &&
+      dispatch({type: "user/loginUser", payload: JSON.parse(loggedUserJson)});
+  }, [dispatch]);
+
+  // Logout a user
   const handleLogOut = () => {
     localStorage.removeItem("user");
-    setUser(null);
+    dispatch({type: "user/logoutUser"});
   };
 
   const addBlog = async (title, author, url) => {
@@ -100,12 +108,7 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    const loggedUserJson = localStorage.getItem("user");
-    loggedUserJson && setUser(JSON.parse(loggedUserJson));
-  }, []);
-
-  // Getting blogs is user is logged in
+  // Getting blogs if user is logged in
   useEffect(() => {
     user &&
       blogService.getAll(user.token).then((blogs) => {
@@ -114,8 +117,6 @@ const App = () => {
         dispatch({type: "blogs/getBlogs", payload: sortedBlogs});
       });
   }, [user, dispatch]);
-
- 
 
   return (
     <div>
