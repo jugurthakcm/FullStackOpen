@@ -92,15 +92,16 @@ const Home = () => {
           {alert.errorMessage && (
             <Alert message={alert.errorMessage} style={errorStyle} />
           )}
+          <Toggleable buttonLabel={"create"}>
+            <CreateBlog addBlog={addBlog} />
+          </Toggleable>
           {blogs.map((blog) => (
             <p key={blog.id}>
               <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
             </p>
           ))}
 
-          <Toggleable buttonLabel={"create"}>
-            <CreateBlog addBlog={addBlog} />
-          </Toggleable>
+          
         </>
       ) : (
         <>
