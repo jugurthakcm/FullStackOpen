@@ -11,12 +11,11 @@ import {useDispatch, useSelector} from "react-redux";
 const App = () => {
   const blogs = useSelector((state) => state.blog);
   const {user} = useSelector((state) => state.user);
+  const alert = useSelector((state) => state.alert);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   // const [user, setUser] = useState(null);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
 
@@ -47,8 +46,12 @@ const App = () => {
       setPassword("");
       localStorage.setItem("user", JSON.stringify(loggedUser));
     } catch (error) {
-      setErrorMessage(error.response.data.error);
-      setTimeout(() => setErrorMessage(""), 3000);
+      dispatch({
+        type: "alert/showErrorMessage",
+        payload: error.response.data.error,
+      });
+
+      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
     }
   };
 
@@ -75,39 +78,56 @@ const App = () => {
       );
       dispatch({type: "blogs/addBlog", payload: addedBlog});
 
-      setSuccessMessage("Blog Added Successfully");
-      setTimeout(() => setSuccessMessage(""), 3000);
+      dispatch({
+        type: "alert/showSuccessMessage",
+        payload: "Blog Added Successfully",
+      });
+
+      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
     } catch (error) {
-      setErrorMessage(error.response.data);
-      setTimeout(() => setErrorMessage(""), 3000);
+      dispatch({
+        type: "alert/showErrorMessage",
+        payload: error.response.data,
+      });
+
+      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
     }
   };
 
   const incrementLikes = async (id) => {
     try {
-
-          await blogService.updateLike(id, user.token);
-
-      
+      await blogService.updateLike(id, user.token);
 
       dispatch({type: "blogs/incrementLikes", payload: id});
     } catch (error) {
-      setErrorMessage(error.response.data);
-      setTimeout(() => setErrorMessage(""), 3000);
+      dispatch({
+        type: "alert/showErrorMessage",
+        payload: error.response.data,
+      });
+
+      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
     }
   };
 
   const deleteBlog = async (id) => {
     try {
       await blogService.deleteBlog(id, user.token);
-      const blogs = await blogService.getAll(user.token);
+
       dispatch({type: "blogs/deleteBlog", payload: id});
 
-      setSuccessMessage("Blog Deleted Successfully");
-      setTimeout(() => setSuccessMessage(""), 3000);
+      dispatch({
+        type: "alert/showSuccessMessage",
+        payload: "Blog Deleted Successfully",
+      });
+
+      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
     } catch (error) {
-      setErrorMessage(error.response.data);
-      setTimeout(() => setErrorMessage(""), 3000);
+      dispatch({
+        type: "alert/showErrorMessage",
+        payload: error.response.data,
+      });
+
+      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
     }
   };
 
@@ -126,10 +146,12 @@ const App = () => {
       {user ? (
         <>
           <h2>blogs</h2>
-          {successMessage && (
-            <Alert message={successMessage} style={successStyle} />
+          {alert.successMessage && (
+            <Alert message={alert.successMessage} style={successStyle} />
           )}
-          {errorMessage && <Alert message={errorMessage} style={errorStyle} />}
+          {alert.errorMessage && (
+            <Alert message={alert.errorMessage} style={errorStyle} />
+          )}
           {blogs.map((blog) => (
             <Blog
               key={blog.id}
@@ -150,7 +172,9 @@ const App = () => {
       ) : (
         <>
           <h2>Login</h2>
-          {errorMessage && <Alert message={errorMessage} style={errorStyle} />}
+          {alert.errorMessage && (
+            <Alert message={alert.errorMessage} style={errorStyle} />
+          )}
           <Login
             handleSubmit={handleSubmit}
             username={username}
