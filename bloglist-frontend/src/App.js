@@ -6,14 +6,19 @@ import Login from "./components/Login";
 import {login} from "./services/login";
 import Alert from "./components/Alert";
 import Toggleable from "./components/Toggleable";
+import {useDispatch, useSelector} from "react-redux";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector((state) => state.blog);
+
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const dispatch = useDispatch();
 
   const successStyle = {
     color: "black",
@@ -75,15 +80,13 @@ const App = () => {
       await blogService.updateLike(id, likes, user.token);
       const blogs = await blogService.getAll(user.token);
       setBlogs(blogs);
-      
     } catch (error) {
       setErrorMessage(error.response.data);
       setTimeout(() => setErrorMessage(""), 3000);
     }
   };
 
-
-  const deleteBlog = async(id)=>{
+  const deleteBlog = async (id) => {
     try {
       await blogService.deleteBlog(id, user.token);
       const blogs = await blogService.getAll(user.token);
@@ -95,16 +98,24 @@ const App = () => {
       setErrorMessage(error.response.data);
       setTimeout(() => setErrorMessage(""), 3000);
     }
-  }
+  };
 
   useEffect(() => {
     const loggedUserJson = localStorage.getItem("user");
     loggedUserJson && setUser(JSON.parse(loggedUserJson));
   }, []);
 
+  // Getting blogs is user is logged in
   useEffect(() => {
-    user && blogService.getAll(user.token).then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
-  }, [user]);
+    user &&
+      blogService.getAll(user.token).then((blogs) => {
+        const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+
+        dispatch({type: "blogs/getBlogs", payload: sortedBlogs});
+      });
+  }, [user, dispatch]);
+
+ 
 
   return (
     <div>
@@ -115,11 +126,14 @@ const App = () => {
             <Alert message={successMessage} style={successStyle} />
           )}
           {errorMessage && <Alert message={errorMessage} style={errorStyle} />}
-          {blogs
-            
-            .map((blog) => (
-              <Blog key={blog.id} blog={blog} incrementLikes={incrementLikes} deleteBlog={deleteBlog}/>
-            ))}
+          {blogs.map((blog) => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              incrementLikes={incrementLikes}
+              deleteBlog={deleteBlog}
+            />
+          ))}
 
           <p>
             {user.username} is logged in{" "}
