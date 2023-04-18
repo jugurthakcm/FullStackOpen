@@ -72,11 +72,15 @@ blogRoutes.delete("/:id", async (request, response) => {
 blogRoutes.put("/:id", async (request, response) => {
   const id = request.params.id;
 
-  const {likes} = request.body;
+  if (!id) return response.status(400).end();
 
-  if (!id || !likes) return response.status(400).end();
+  const blogToUpdate = await Blog.findById(id);
 
-  const updatedBlog = await Blog.findByIdAndUpdate(id, {likes}, {new: true});
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    id,
+    {likes: blogToUpdate.likes + 1},
+    {new: true}
+  );
 
   response.status(200).send(updatedBlog);
 });

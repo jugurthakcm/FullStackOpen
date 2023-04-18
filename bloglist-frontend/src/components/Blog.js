@@ -12,7 +12,7 @@ const Blog = ({blog, incrementLikes, deleteBlog}) => {
   const [toggleView, setToggleView] = useState(false);
 
   const handleLike = () => {
-    incrementLikes(blog.id, blog.likes + 1);
+    incrementLikes(blog.id);
   };
 
   const handleDelete = () => {

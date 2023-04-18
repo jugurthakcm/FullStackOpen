@@ -13,8 +13,8 @@ const addBlog = (title, author, url, token) => {
   return request.then((res) => res.data);
 };
 
-const updateLike = (id, likes, token) => {
-  const request = axios.put(`${baseUrl}/${id}`, {likes}, setToken(token));
+const updateLike = (id, token) => {
+  const request = axios.put(`${baseUrl}/${id}`, {}, setToken(token));
 
   return request.then((res) => res.data);
 };

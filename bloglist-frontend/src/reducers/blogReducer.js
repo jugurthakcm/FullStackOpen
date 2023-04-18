@@ -18,6 +18,18 @@ const blogSlice = createSlice({
 
       return [...filteredBlog];
     },
+
+    incrementLikes(state, action) {
+      const id = action.payload;
+
+      const blogToChange = state.find((blog) => blog.id === id);
+
+      const changedBlog = {...blogToChange, likes: blogToChange.likes + 1};
+
+      return state.map((blog) =>
+        blog.id === changedBlog.id ? changedBlog : blog
+      );
+    },
   },
 });
 

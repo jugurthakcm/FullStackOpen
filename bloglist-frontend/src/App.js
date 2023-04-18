@@ -83,11 +83,14 @@ const App = () => {
     }
   };
 
-  const incrementLikes = async (id, likes) => {
+  const incrementLikes = async (id) => {
     try {
-      await blogService.updateLike(id, likes, user.token);
-      const blogs = await blogService.getAll(user.token);
-      setBlogs(blogs);
+
+          await blogService.updateLike(id, user.token);
+
+      
+
+      dispatch({type: "blogs/incrementLikes", payload: id});
     } catch (error) {
       setErrorMessage(error.response.data);
       setTimeout(() => setErrorMessage(""), 3000);
