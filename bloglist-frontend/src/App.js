@@ -98,7 +98,7 @@ const App = () => {
     try {
       await blogService.deleteBlog(id, user.token);
       const blogs = await blogService.getAll(user.token);
-      setBlogs(blogs);
+      dispatch({type: "blogs/deleteBlog", payload: id});
 
       setSuccessMessage("Blog Deleted Successfully");
       setTimeout(() => setSuccessMessage(""), 3000);
