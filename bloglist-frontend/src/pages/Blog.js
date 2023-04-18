@@ -79,10 +79,10 @@ const Blog = ({blog}) => {
           </a>
           <p>
             {blog.likes} likes
-            <button onClick={() => handleLike(blog.likes)}>Like</button>
+            <button onClick={() => handleLike(blog.likes)} className="btn btn-primary ms-2">Like</button>
           </p>
           <p>Added by {blog.user.name}</p>
-          <button onClick={handleDelete}>delete</button>
+          <button onClick={handleDelete} className="btn btn-danger">Delete</button>
         </div>
       </div>
     </div>

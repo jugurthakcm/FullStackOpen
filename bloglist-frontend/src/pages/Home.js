@@ -16,7 +16,6 @@ const Home = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-
   const dispatch = useDispatch();
 
   const successStyle = {
@@ -81,7 +80,6 @@ const Home = () => {
     }
   };
 
-
   return (
     <div>
       {user ? (
@@ -92,16 +90,15 @@ const Home = () => {
           {alert.errorMessage && (
             <Alert message={alert.errorMessage} style={errorStyle} />
           )}
-          <Toggleable buttonLabel={"create"}>
+          <Toggleable buttonLabel={"Create new blog"}>
             <CreateBlog addBlog={addBlog} />
           </Toggleable>
+
           {blogs.map((blog) => (
-            <p key={blog.id}>
+            <p key={blog.id} className="mt-2">
               <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
             </p>
           ))}
-
-          
         </>
       ) : (
         <>

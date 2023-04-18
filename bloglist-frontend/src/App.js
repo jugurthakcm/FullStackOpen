@@ -53,19 +53,52 @@ const App = () => {
     blogs && matchBlog ? blogs.find((b) => b.id === matchBlog.params.id) : null;
 
   return (
-    <>
-      <nav>
-       
-        <Link to="/">Home Page</Link>{" "}
-        <Link to="/users">Users</Link>
+    <div className="container">
+  
+
+      <nav class="navbar navbar-expand-lg bg-body-tertiary mb-3">
+        <div class="container-fluid">
+          <span class="navbar-brand">Blog App</span>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <Link className="nav-link active" aria-current="page" to="/">
+                  Home
+                </Link>
+              </li>
+              <li class="nav-item">
+                <Link className="nav-link" to="/users">
+                  Users
+                </Link>
+              </li>
+            </ul>
+            <div class="d-flex">
+              {user && (
+                <span>
+                  {user.username}
+                  <button
+                    className="btn btn-primary ms-2"
+                    onClick={handleLogOut}
+                  >
+                    Log Out
+                  </button>
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
       </nav>
-      <h1>Blog App</h1>
-      {user && (
-        <p>
-          {user.username} is logged in
-          <button onClick={handleLogOut}>Log Out</button>
-        </p>
-      )}
 
       <Routes>
         <Route exact path="/" element={<Home />} />
@@ -73,7 +106,7 @@ const App = () => {
         <Route path="/users/:id" element={<SingleUser user={userMatched} />} />
         <Route path="/blogs/:id" element={<Blog blog={blogMatched} />} />
       </Routes>
-    </>
+    </div>
   );
 };
 

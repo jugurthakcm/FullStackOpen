@@ -5,12 +5,12 @@ const Toggleable = ({buttonLabel, children}) => {
 
   return !toggleVisible ? (
     <>
-      <button onClick={() => setToggleVisible(true)}>{buttonLabel}</button>
+      <button className='btn btn-primary' onClick={() => setToggleVisible(true)}>{buttonLabel}</button>
     </>
   ) : (
     <>
       <div>{children}</div>
-      <button onClick={() => setToggleVisible(false)}>Cancel</button>
+      <button className="btn btn-warning mt-2" onClick={() => setToggleVisible(false)}>Cancel</button>
     </>
   );
 };

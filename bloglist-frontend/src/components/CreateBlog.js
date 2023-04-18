@@ -5,12 +5,11 @@ const CreateBlog = ({addBlog}) => {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-
   const handleAddBlog = (e) => {
     e.preventDefault();
-    addBlog(title,author, url);
+    addBlog(title, author, url);
     setTitle("");
-    setAuthor("")
+    setAuthor("");
     setUrl("");
   };
 
@@ -18,31 +17,52 @@ const CreateBlog = ({addBlog}) => {
     <>
       <h2>createBlog</h2>
       <form onSubmit={handleAddBlog}>
-        <input
-          name="title"
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <br />
-        <input
-          name="title"
-          type="text"
-          placeholder="Author"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-        />
-        <br />
-        <input
-          name="url"
-          type="text"
-          placeholder="Url"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-        <br />
-        <button type="submit">Submit</button>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">
+            Title
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default"
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">
+            Author
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default"
+            name="author"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">
+            URL
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default"
+            name="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+        </div>
+
+        <button type="submit" className="btn btn-primary mt-2">
+          Submit
+        </button>
       </form>
     </>
   );
