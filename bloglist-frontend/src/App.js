@@ -1,4 +1,4 @@
-import {Routes, Route, useMatch} from "react-router-dom";
+import {Routes, Route, useMatch, Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Home from "./pages/Home";
 import Users from "./pages/Users";
@@ -54,6 +54,11 @@ const App = () => {
 
   return (
     <>
+      <nav>
+       
+        <Link to="/">Home Page</Link>{" "}
+        <Link to="/users">Users</Link>
+      </nav>
       <h1>Blog App</h1>
       {user && (
         <p>
