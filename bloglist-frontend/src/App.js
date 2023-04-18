@@ -5,9 +5,11 @@ import Users from "./pages/Users";
 import axios from "axios";
 import SingleUser from "./pages/SingleUser";
 import {useState, useEffect} from "react";
+import Blog from "./pages/Blog";
 
 const App = () => {
   const {user} = useSelector((state) => state.user);
+  const blogs = useSelector((state) => state.blog);
   const dispatch = useDispatch();
 
   //Login User
@@ -29,9 +31,15 @@ const App = () => {
     axios.get("/api/users").then((res) => setUsers(res.data));
   }, []);
 
-  const match = useMatch("/users/:id");
+  const matchUser = useMatch("/users/:id");
 
-  const userMatch = users && match ? users.find(u=>u.id === match.params.id) : null
+  const userMatched =
+    users && matchUser ? users.find((u) => u.id === matchUser.params.id) : null;
+
+  const matchBlog = useMatch("/blogs/:id");
+
+  const blogMatched =
+    blogs && matchBlog ? blogs.find((b) => b.id === matchBlog.params.id) : null;
 
   return (
     <>
@@ -46,7 +54,8 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/users" element={<Users users={users} />} />
-        <Route path="/users/:id" element={<SingleUser user={userMatch}/>} />
+        <Route path="/users/:id" element={<SingleUser user={userMatched} />} />
+        <Route path="/blogs/:id" element={<Blog blog={blogMatched} />} />
       </Routes>
     </>
   );

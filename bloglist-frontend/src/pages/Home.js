@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import Blog from "../components/Blog";
+import Blog from "./Blog";
 import CreateBlog from "../components/CreateBlog";
 import blogService from "../services/blogs";
 import Login from "../components/Login";
@@ -7,6 +7,7 @@ import {login} from "../services/login";
 import Alert from "../components/Alert";
 import Toggleable from "../components/Toggleable";
 import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 
 const Home = () => {
   const blogs = useSelector((state) => state.blog);
@@ -81,43 +82,6 @@ const Home = () => {
     }
   };
 
-  const incrementLikes = async (id) => {
-    try {
-      await blogService.updateLike(id, user.token);
-
-      dispatch({type: "blogs/incrementLikes", payload: id});
-    } catch (error) {
-      dispatch({
-        type: "alert/showErrorMessage",
-        payload: error.response.data,
-      });
-
-      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
-    }
-  };
-
-  const deleteBlog = async (id) => {
-    try {
-      await blogService.deleteBlog(id, user.token);
-
-      dispatch({type: "blogs/deleteBlog", payload: id});
-
-      dispatch({
-        type: "alert/showSuccessMessage",
-        payload: "Blog Deleted Successfully",
-      });
-
-      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
-    } catch (error) {
-      dispatch({
-        type: "alert/showErrorMessage",
-        payload: error.response.data,
-      });
-
-      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
-    }
-  };
-
   // Getting blogs if user is logged in
   useEffect(() => {
     user &&
@@ -139,12 +103,9 @@ const Home = () => {
             <Alert message={alert.errorMessage} style={errorStyle} />
           )}
           {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              incrementLikes={incrementLikes}
-              deleteBlog={deleteBlog}
-            />
+            <p key={blog.id}>
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </p>
           ))}
 
           <Toggleable buttonLabel={"create"}>
