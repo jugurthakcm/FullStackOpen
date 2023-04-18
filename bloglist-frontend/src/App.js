@@ -1,8 +1,10 @@
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, useMatch} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Home from "./pages/Home";
 import Users from "./pages/Users";
-import {useEffect} from "react";
+import axios from "axios";
+import SingleUser from "./pages/SingleUser";
+import {useState, useEffect} from "react";
 
 const App = () => {
   const {user} = useSelector((state) => state.user);
@@ -21,6 +23,16 @@ const App = () => {
     dispatch({type: "user/logoutUser"});
   };
 
+  const [users, setUsers] = useState();
+
+  useEffect(() => {
+    axios.get("/api/users").then((res) => setUsers(res.data));
+  }, []);
+
+  const match = useMatch("/users/:id");
+
+  const userMatch = users && match ? users.find(u=>u.id === match.params.id) : null
+
   return (
     <>
       <h1>Blog App</h1>
@@ -33,7 +45,8 @@ const App = () => {
 
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/users" element={<Users users={users} />} />
+        <Route path="/users/:id" element={<SingleUser user={userMatch}/>} />
       </Routes>
     </>
   );

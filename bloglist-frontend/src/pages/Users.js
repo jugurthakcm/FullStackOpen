@@ -1,12 +1,4 @@
-import axios from "axios";
-import {useEffect, useState} from "react";
-
-const Users = () => {
-  const [users, setUsers] = useState();
-  useEffect(() => {
-    axios.get("/api/users").then((res) => setUsers(res.data));
-  }, []);
-
+const Users = ({users}) => {
   return (
     <div>
       <h2>Users</h2>
