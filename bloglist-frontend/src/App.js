@@ -73,7 +73,7 @@ const App = () => {
         url,
         user.token
       );
-      setBlogs([...blogs, addedBlog]);
+      dispatch({type: "blogs/addBlog", payload: addedBlog});
 
       setSuccessMessage("Blog Added Successfully");
       setTimeout(() => setSuccessMessage(""), 3000);
