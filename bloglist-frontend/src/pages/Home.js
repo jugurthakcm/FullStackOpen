@@ -18,22 +18,8 @@ const Home = () => {
 
   const dispatch = useDispatch();
 
-  const successStyle = {
-    color: "black",
-    backgroundColor: "lightgreen",
-    height: "50px",
-    width: "50%",
-    border: "2px solid green",
-    fontSize: "2rem",
-  };
-  const errorStyle = {
-    color: "black",
-    backgroundColor: "red",
-    height: "50px",
-    width: "50%",
-    border: "2px solid red",
-    fontSize: "2rem",
-  };
+  const successStyle = {class: "alert-success"};
+  const errorStyle = {class: "alert-danger"};
 
   const handleSubmit = async (e) => {
     e.preventDefault();

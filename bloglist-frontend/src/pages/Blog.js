@@ -1,13 +1,10 @@
+import {useNavigate} from "react-router-dom";
 import blogService from "../services/blogs";
 
 import {useDispatch, useSelector} from "react-redux";
 
 const Blog = ({blog}) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    marginBottom: 5,
-  };
+  const navigate = useNavigate();
 
   const {user} = useSelector((state) => state.user);
 
@@ -62,12 +59,14 @@ const Blog = ({blog}) => {
     if (!confirm) return null;
 
     deleteBlog(blog.id);
+
+    navigate("/");
   };
 
   if (!blog) return null;
 
   return (
-    <div style={blogStyle}>
+    <div>
       <div className="blog">
         <h2>
           {blog.title} {blog.author}
@@ -79,10 +78,17 @@ const Blog = ({blog}) => {
           </a>
           <p>
             {blog.likes} likes
-            <button onClick={() => handleLike(blog.likes)} className="btn btn-primary ms-2">Like</button>
+            <button
+              onClick={() => handleLike(blog.likes)}
+              className="btn btn-primary ms-2"
+            >
+              Like
+            </button>
           </p>
           <p>Added by {blog.user.name}</p>
-          <button onClick={handleDelete} className="btn btn-danger">Delete</button>
+          <button onClick={handleDelete} className="btn btn-danger">
+            Delete
+          </button>
         </div>
       </div>
     </div>
