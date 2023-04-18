@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const useField = (type) => {
@@ -45,12 +45,12 @@ const App = () => {
 
   const handleNoteSubmit = (event) => {
     event.preventDefault();
-    noteService.create({content: content.value});
+    noteService.create({ content: content.value });
   };
 
   const handlePersonSubmit = (event) => {
     event.preventDefault();
-    personService.create({name: name.value, number: number.value});
+    personService.create({ name: name.value, number: number.value });
   };
 
   return (
