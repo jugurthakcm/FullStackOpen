@@ -6,6 +6,7 @@ import axios from "axios";
 import SingleUser from "./pages/SingleUser";
 import {useState, useEffect} from "react";
 import Blog from "./pages/Blog";
+import blogService from "./services/blogs";
 
 const App = () => {
   const {user} = useSelector((state) => state.user);
@@ -30,6 +31,16 @@ const App = () => {
   useEffect(() => {
     axios.get("/api/users").then((res) => setUsers(res.data));
   }, []);
+
+  // Getting blogs if user is logged in
+  useEffect(() => {
+    user &&
+      blogService.getAll(user.token).then((blogs) => {
+        const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+
+        dispatch({type: "blogs/getBlogs", payload: sortedBlogs});
+      });
+  }, [user, dispatch]);
 
   const matchUser = useMatch("/users/:id");
 

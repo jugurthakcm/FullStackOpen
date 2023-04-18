@@ -1,5 +1,4 @@
-import {useState, useEffect} from "react";
-import Blog from "./Blog";
+import {useState} from "react";
 import CreateBlog from "../components/CreateBlog";
 import blogService from "../services/blogs";
 import Login from "../components/Login";
@@ -16,7 +15,7 @@ const Home = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [user, setUser] = useState(null);
+
 
   const dispatch = useDispatch();
 
@@ -82,15 +81,6 @@ const Home = () => {
     }
   };
 
-  // Getting blogs if user is logged in
-  useEffect(() => {
-    user &&
-      blogService.getAll(user.token).then((blogs) => {
-        const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
-
-        dispatch({type: "blogs/getBlogs", payload: sortedBlogs});
-      });
-  }, [user, dispatch]);
 
   return (
     <div>
