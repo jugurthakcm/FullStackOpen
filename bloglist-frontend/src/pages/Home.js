@@ -1,16 +1,16 @@
-import {useState} from "react";
+import { useState } from "react";
 import CreateBlog from "../components/CreateBlog";
 import blogService from "../services/blogs";
 import Login from "../components/Login";
-import {login} from "../services/login";
+import { login } from "../services/login";
 import Alert from "../components/Alert";
 import Toggleable from "../components/Toggleable";
-import {useDispatch, useSelector} from "react-redux";
-import {Link} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const blogs = useSelector((state) => state.blog);
-  const {user} = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const alert = useSelector((state) => state.alert);
 
   const [username, setUsername] = useState("");
@@ -18,15 +18,15 @@ const Home = () => {
 
   const dispatch = useDispatch();
 
-  const successStyle = {class: "alert-success"};
-  const errorStyle = {class: "alert-danger"};
+  const successStyle = { class: "alert-success" };
+  const errorStyle = { class: "alert-danger" };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const loggedUser = await login(username, password);
-      dispatch({type: "user/loginUser", payload: loggedUser});
+      dispatch({ type: "user/loginUser", payload: loggedUser });
       setUsername("");
       setPassword("");
       localStorage.setItem("user", JSON.stringify(loggedUser));
@@ -36,7 +36,7 @@ const Home = () => {
         payload: error.response.data.error,
       });
 
-      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
+      setTimeout(() => dispatch({ type: "alert/clearAlert" }), 3000);
     }
   };
 
@@ -48,21 +48,21 @@ const Home = () => {
         url,
         user.token
       );
-      dispatch({type: "blogs/addBlog", payload: addedBlog});
+      dispatch({ type: "blogs/addBlog", payload: addedBlog });
 
       dispatch({
         type: "alert/showSuccessMessage",
         payload: "Blog Added Successfully",
       });
 
-      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
+      setTimeout(() => dispatch({ type: "alert/clearAlert" }), 3000);
     } catch (error) {
       dispatch({
         type: "alert/showErrorMessage",
         payload: error.response.data,
       });
 
-      setTimeout(() => dispatch({type: "alert/clearAlert"}), 3000);
+      setTimeout(() => dispatch({ type: "alert/clearAlert" }), 3000);
     }
   };
 
