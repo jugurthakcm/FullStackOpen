@@ -17,7 +17,7 @@ const Login = ({
           <input
             type="text"
             className="form-control"
-            id="exampleInputEmail1"
+            id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -29,13 +29,13 @@ const Login = ({
           <input
             type="password"
             className="form-control"
-            id="exampleInputPassword1"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" id="submitLogin" className="btn btn-primary">
           Submit
         </button>
       </form>
