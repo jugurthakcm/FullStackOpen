@@ -82,7 +82,9 @@ const Home = () => {
 
           {blogs.map((blog) => (
             <p key={blog.id} className="mt-2">
-              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              <Link to={`/blogs/${blog.id}`} className="blog-list-item">
+                {blog.title}
+              </Link>
             </p>
           ))}
         </>

@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-const CreateBlog = ({addBlog}) => {
+const CreateBlog = ({ addBlog }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -29,6 +29,7 @@ const CreateBlog = ({addBlog}) => {
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            id="blogTitle"
           />
         </div>
         <div class="input-group mb-3">
@@ -43,6 +44,7 @@ const CreateBlog = ({addBlog}) => {
             name="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
+            id="blogAuthor"
           />
         </div>
         <div class="input-group mb-3">
@@ -57,10 +59,15 @@ const CreateBlog = ({addBlog}) => {
             name="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
+            id="blogUrl"
           />
         </div>
 
-        <button type="submit" className="btn btn-primary mt-2">
+        <button
+          type="submit"
+          className="btn btn-primary mt-2"
+          id="submitCreateBlogBtn"
+        >
           Submit
         </button>
       </form>

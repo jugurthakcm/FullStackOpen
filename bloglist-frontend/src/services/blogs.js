@@ -1,6 +1,6 @@
 import axios from "axios";
-import {setToken} from "../utils/utils";
-const baseUrl = "/api/blogs";
+import { setToken } from "../utils/utils";
+const baseUrl = "http://localhost:3003/api/blogs";
 
 const getAll = (token) => {
   const request = axios.get(baseUrl, setToken(token));
@@ -8,7 +8,7 @@ const getAll = (token) => {
 };
 
 const addBlog = (title, author, url, token) => {
-  const request = axios.post(baseUrl, {title, author, url}, setToken(token));
+  const request = axios.post(baseUrl, { title, author, url }, setToken(token));
 
   return request.then((res) => res.data);
 };
@@ -26,4 +26,4 @@ const deleteBlog = (id, token) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default {getAll, addBlog, updateLike, deleteBlog};
+export default { getAll, addBlog, updateLike, deleteBlog };
